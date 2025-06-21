@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "My Complaints" %}{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box">
+                <div class="page-title-right">
+                    <ol class="breadcrumb m-0">
+                        <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">{% trans "Dashboard" %}</a></li>
+                        <li class="breadcrumb-item active">{% trans "My Complaints" %}</li>
+                    </ol>
+                </div>
+                <h4 class="page-title">{% trans "My Complaints" %}</h4>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <h4 class="card-title">{% trans "My Complaints" %}</h4>
+                        </div>
+                        <div class="col-auto">
+                            <a href="{% url 'complaint_create' %}" class="btn btn-primary">
+                                <i class="ri-add-line"></i> {% trans "Submit New Complaint" %}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    {% if complaints %}
+                    <div class="table-responsive">
+                        <table class="table table-centered table-nowrap mb-0">
+                            <thead>
+                                <tr>
+                                    <th>{% trans "Title" %}</th>
+                                    <th>{% trans "Category" %}</th>
+                                    <th>{% trans "Status" %}</th>
+                                    <th>{% trans "Created At" %}</th>
+                                    <th>{% trans "Actions" %}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for complaint in complaints %}
+                                <tr>
+                                    <td>{{ complaint.title }}</td>
+                                    <td>{{ complaint.get_category_display }}</td>
+                                    <td>
+                                        {% if complaint.status == 'new' %}
+                                        <span class="badge bg-info">{% trans "New" %}</span>
+                                        {% elif complaint.status == 'in_progress' %}
+                                        <span class="badge bg-warning">{% trans "In Progress" %}</span>
+                                        {% elif complaint.status == 'resolved' %}
+                                        <span class="badge bg-success">{% trans "Resolved" %}</span>
+                                        {% elif complaint.status == 'rejected' %}
+                                        <span class="badge bg-danger">{% trans "Rejected" %}</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ complaint.created_at|date:"d M Y" }}</td>
+                                    <td>
+                                        <a href="{% url 'complaint_detail' complaint.pk %}" class="btn btn-sm btn-info">
+                                            <i class="ri-eye-line"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="text-center p-4">
+                        <p class="text-muted">{% trans "You haven't submitted any complaints yet." %}</p>
+                        <a href="{% url 'complaint_create' %}" class="btn btn-primary mt-2">
+                            <i class="ri-add-line"></i> {% trans "Submit a Complaint" %}
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

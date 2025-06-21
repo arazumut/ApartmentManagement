@@ -1,0 +1,206 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Complaint Details" %}{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box">
+                <div class="page-title-right">
+                    <ol class="breadcrumb m-0">
+                        <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">{% trans "Dashboard" %}</a></li>
+                        {% if user.is_staff or user.is_superuser %}
+                        <li class="breadcrumb-item"><a href="{% url 'complaint_list' %}">{% trans "Complaints" %}</a></li>
+                        {% else %}
+                        <li class="breadcrumb-item"><a href="{% url 'resident_complaint_list' %}">{% trans "My Complaints" %}</a></li>
+                        {% endif %}
+                        <li class="breadcrumb-item active">{% trans "Details" %}</li>
+                    </ol>
+                </div>
+                <h4 class="page-title">{% trans "Complaint Details" %}</h4>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-header">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <h4 class="card-title">{{ complaint.title }}</h4>
+                        </div>
+                        <div class="col-auto">
+                            {% if user.is_staff or user.is_superuser %}
+                            <a href="{% url 'complaint_update' complaint.pk %}" class="btn btn-warning">
+                                <i class="ri-pencil-line"></i> {% trans "Edit" %}
+                            </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="mb-4">
+                        <h5 class="text-uppercase">{% trans "Description" %}</h5>
+                        <div class="bg-light p-3 rounded">
+                            {{ complaint.description|linebreaks }}
+                        </div>
+                    </div>
+
+                    {% if complaint.attachment %}
+                    <div class="mb-4">
+                        <h5 class="text-uppercase">{% trans "Attachment" %}</h5>
+                        <div class="mt-2">
+                            <a href="{{ complaint.attachment.url }}" class="btn btn-sm btn-primary" target="_blank">
+                                <i class="ri-file-download-line"></i> {% trans "Download Attachment" %}
+                            </a>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    {% if complaint.resolution_notes %}
+                    <div class="mb-4">
+                        <h5 class="text-uppercase">{% trans "Resolution Notes" %}</h5>
+                        <div class="bg-light p-3 rounded">
+                            {{ complaint.resolution_notes|linebreaks }}
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    <div class="mb-4">
+                        <h5 class="text-uppercase">{% trans "Comments" %}</h5>
+                        {% if complaint.comments.all %}
+                        <div class="timeline">
+                            {% for comment in complaint.comments.all %}
+                            <div class="timeline-item">
+                                <div class="timeline-dot bg-primary"></div>
+                                <div class="timeline-content">
+                                    <div class="card mb-0">
+                                        <div class="card-header bg-light">
+                                            <div class="d-flex align-items-center">
+                                                <div class="flex-grow-1">
+                                                    <span class="fw-bold">{{ comment.user.get_full_name }}</span>
+                                                    <small class="text-muted ms-2">{{ comment.created_at|date:"d M Y H:i" }}</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card-body">
+                                            <p class="mb-0">{{ comment.comment|linebreaks }}</p>
+                                            {% if comment.attachment %}
+                                            <div class="mt-2">
+                                                <a href="{{ comment.attachment.url }}" class="btn btn-sm btn-outline-primary" target="_blank">
+                                                    <i class="ri-file-download-line"></i> {% trans "Attachment" %}
+                                                </a>
+                                            </div>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% else %}
+                        <div class="text-center p-3">
+                            <p class="text-muted">{% trans "No comments yet." %}</p>
+                        </div>
+                        {% endif %}
+
+                        <div class="mt-4">
+                            <form method="post" action="{% url 'add_complaint_comment' complaint.pk %}" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <div class="mb-3">
+                                    <label for="comment" class="form-label">{% trans "Add Comment" %}</label>
+                                    <textarea class="form-control" id="comment" name="comment" rows="3" required></textarea>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="attachment" class="form-label">{% trans "Attachment" %} ({% trans "optional" %})</label>
+                                    <input type="file" class="form-control" id="attachment" name="attachment">
+                                </div>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="ri-send-plane-line"></i> {% trans "Submit Comment" %}
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">{% trans "Complaint Information" %}</h4>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <h5 class="text-uppercase">{% trans "Status" %}</h5>
+                        {% if complaint.status == 'new' %}
+                        <span class="badge bg-info">{% trans "New" %}</span>
+                        {% elif complaint.status == 'in_progress' %}
+                        <span class="badge bg-warning">{% trans "In Progress" %}</span>
+                        {% elif complaint.status == 'resolved' %}
+                        <span class="badge bg-success">{% trans "Resolved" %}</span>
+                        {% elif complaint.status == 'rejected' %}
+                        <span class="badge bg-danger">{% trans "Rejected" %}</span>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        <h5 class="text-uppercase">{% trans "Category" %}</h5>
+                        <p>{{ complaint.get_category_display }}</p>
+                    </div>
+
+                    <div class="mb-3">
+                        <h5 class="text-uppercase">{% trans "Priority" %}</h5>
+                        <div>
+                            {% for i in "12345"|make_list %}
+                                {% if forloop.counter <= complaint.priority %}
+                                <i class="ri-star-fill text-warning"></i>
+                                {% else %}
+                                <i class="ri-star-line text-muted"></i>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <h5 class="text-uppercase">{% trans "Building" %}</h5>
+                        <p>{{ complaint.building.name }}</p>
+                    </div>
+
+                    <div class="mb-3">
+                        <h5 class="text-uppercase">{% trans "Apartment" %}</h5>
+                        <p>{{ complaint.apartment.number }}</p>
+                    </div>
+
+                    <div class="mb-3">
+                        <h5 class="text-uppercase">{% trans "Created By" %}</h5>
+                        <p>{{ complaint.created_by.get_full_name }}</p>
+                    </div>
+
+                    <div class="mb-3">
+                        <h5 class="text-uppercase">{% trans "Created At" %}</h5>
+                        <p>{{ complaint.created_at|date:"d M Y H:i" }}</p>
+                    </div>
+
+                    {% if complaint.assigned_to %}
+                    <div class="mb-3">
+                        <h5 class="text-uppercase">{% trans "Assigned To" %}</h5>
+                        <p>{{ complaint.assigned_to.get_full_name }}</p>
+                    </div>
+                    {% endif %}
+
+                    {% if complaint.resolved_at %}
+                    <div class="mb-3">
+                        <h5 class="text-uppercase">{% trans "Resolved At" %}</h5>
+                        <p>{{ complaint.resolved_at|date:"d M Y H:i" }}</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

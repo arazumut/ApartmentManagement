@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block title %}Gider Detayı{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box">
+                <h4 class="page-title">Gider Detayı</h4>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="header-title">{{ expense.title }}</h4>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <h5>Gider Bilgileri</h5>
+                                <div class="table-responsive">
+                                    <table class="table table-sm">
+                                        <tbody>
+                                            <tr>
+                                                <th>Bina:</th>
+                                                <td>{{ expense.building.name }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Başlık:</th>
+                                                <td>{{ expense.title }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Kategori:</th>
+                                                <td>{{ expense.get_category_display }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Tutar:</th>
+                                                <td>{{ expense.amount }}₺</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Tarih:</th>
+                                                <td>{{ expense.expense_date }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Fatura No:</th>
+                                                <td>{{ expense.invoice_number|default:"-" }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Açıklama:</th>
+                                                <td>{{ expense.description|default:"-" }}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            {% if expense.invoice_image %}
+                            <div class="mb-3">
+                                <h5>Fatura Görüntüsü</h5>
+                                <img src="{{ expense.invoice_image.url }}" alt="Fatura" class="img-fluid">
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <div class="mt-3">
+                        <a href="{% url 'expense_update' expense.id %}" class="btn btn-primary">Düzenle</a>
+                        <a href="{% url 'expense_list' %}" class="btn btn-secondary">Geri Dön</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

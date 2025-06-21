@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Task Detail{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box">
+                <div class="page-title-right">
+                    <ol class="breadcrumb m-0">
+                        <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Dashboard</a></li>
+                        <li class="breadcrumb-item"><a href="{% url 'task_list' %}">Tasks</a></li>
+                        <li class="breadcrumb-item active">{{ task.title }}</li>
+                    </ol>
+                </div>
+                <h4 class="page-title">Task Details</h4>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h4 class="header-title">{{ task.title }}</h4>
+                    <a href="{% url 'task_update' task.pk %}" class="btn btn-primary btn-sm">Edit Task</a>
+                </div>
+                <div class="card-body">
+                    <div class="mb-4">
+                        <h5>Description</h5>
+                        <p>{{ task.description|linebreaks }}</p>
+                    </div>
+
+                    {% if task.completion_notes %}
+                    <div class="mb-4">
+                        <h5>Completion Notes</h5>
+                        <p>{{ task.completion_notes|linebreaks }}</p>
+                    </div>
+                    {% endif %}
+
+                    {% if images %}
+                    <div class="mb-4">
+                        <h5>Task Images</h5>
+                        <div class="row">
+                            {% for image in images %}
+                            <div class="col-md-4 mb-3">
+                                <a href="{{ image.image.url }}" target="_blank">
+                                    <img src="{{ image.image.url }}" class="img-fluid rounded" alt="Task Image">
+                                </a>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="header-title">Task Information</h4>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <h5>Status</h5>
+                        {% if task.status == 'pending' %}
+                            <span class="badge badge-warning-lighten">Pending</span>
+                        {% elif task.status == 'in_progress' %}
+                            <span class="badge badge-info-lighten">In Progress</span>
+                        {% elif task.status == 'completed' %}
+                            <span class="badge badge-success-lighten">Completed</span>
+                        {% elif task.status == 'cancelled' %}
+                            <span class="badge badge-danger-lighten">Cancelled</span>
+                        {% endif %}
+                    </div>
+                    <div class="mb-3">
+                        <h5>Building</h5>
+                        <p>{{ task.building.name }}</p>
+                    </div>
+                    <div class="mb-3">
+                        <h5>Assigned To</h5>
+                        <p>{{ task.assigned_to.get_full_name }}</p>
+                    </div>
+                    <div class="mb-3">
+                        <h5>Priority</h5>
+                        <span class="badge {% if task.priority == 5 %}badge-danger{% elif task.priority == 4 %}badge-warning{% elif task.priority == 3 %}badge-info{% elif task.priority == 2 %}badge-primary{% else %}badge-secondary{% endif %}">
+                            {{ task.priority }}
+                        </span>
+                    </div>
+                    <div class="mb-3">
+                        <h5>Due Date</h5>
+                        <p>{{ task.due_date|date:"d M Y, H:i" }}</p>
+                    </div>
+                    <div class="mb-3">
+                        <h5>Frequency</h5>
+                        <p>{{ task.get_frequency_display }}</p>
+                    </div>
+                    {% if task.recurrence_end_date %}
+                    <div class="mb-3">
+                        <h5>Recurrence End Date</h5>
+                        <p>{{ task.recurrence_end_date|date:"d M Y" }}</p>
+                    </div>
+                    {% endif %}
+                    <div class="mb-3">
+                        <h5>Created By</h5>
+                        <p>{{ task.created_by.get_full_name }}</p>
+                    </div>
+                    <div class="mb-3">
+                        <h5>Created At</h5>
+                        <p>{{ task.created_at|date:"d M Y, H:i" }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

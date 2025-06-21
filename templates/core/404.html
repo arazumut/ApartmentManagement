@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}404 - Sayfa Bulunamadı{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-6">
+        <div class="text-center">
+            <img src="{% static 'images/error/error-404.png' %}" height="300" alt="404 Hatası">
+            <h1 class="text-error mt-4">404</h1>
+            <h4 class="text-uppercase text-danger mt-3">Sayfa Bulunamadı</h4>
+            <p class="text-muted mt-3">Aradığınız sayfa mevcut değil veya kaldırılmış olabilir.</p>
+
+            <a class="btn btn-primary mt-3" href="{% url 'home' %}"><i class="ri-home-4-line me-1"></i> Ana Sayfaya Dön</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

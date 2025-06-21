@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Yeni Bina Ekle{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box">
+                <div class="page-title-right">
+                    <ol class="breadcrumb m-0">
+                        <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Dashboard</a></li>
+                        <li class="breadcrumb-item"><a href="{% url 'building_list' %}">Binalar</a></li>
+                        <li class="breadcrumb-item active">Yeni Bina</li>
+                    </ol>
+                </div>
+                <h4 class="page-title">Yeni Bina Ekle</h4>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="id_name" class="form-label">Bina Adı</label>
+                                    <input type="text" name="name" class="form-control" id="id_name" required>
+                                    {% if form.name.errors %}
+                                        <div class="invalid-feedback d-block">
+                                            {{ form.name.errors }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="id_address" class="form-label">Adres</label>
+                                    <textarea name="address" class="form-control" id="id_address" rows="3" required></textarea>
+                                    {% if form.address.errors %}
+                                        <div class="invalid-feedback d-block">
+                                            {{ form.address.errors }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label for="id_block_count" class="form-label">Blok Sayısı</label>
+                                    <input type="number" name="block_count" class="form-control" id="id_block_count" value="1" min="1" required>
+                                    {% if form.block_count.errors %}
+                                        <div class="invalid-feedback d-block">
+                                            {{ form.block_count.errors }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label for="id_floors_per_block" class="form-label">Blok Başına Kat Sayısı</label>
+                                    <input type="number" name="floors_per_block" class="form-control" id="id_floors_per_block" value="1" min="1" required>
+                                    {% if form.floors_per_block.errors %}
+                                        <div class="invalid-feedback d-block">
+                                            {{ form.floors_per_block.errors }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label for="id_apartments_per_floor" class="form-label">Kat Başına Daire Sayısı</label>
+                                    <input type="number" name="apartments_per_floor" class="form-control" id="id_apartments_per_floor" value="1" min="1" required>
+                                    {% if form.apartments_per_floor.errors %}
+                                        <div class="invalid-feedback d-block">
+                                            {{ form.apartments_per_floor.errors }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="text-end">
+                            <button type="submit" class="btn btn-success">Kaydet</button>
+                            <a href="{% url 'building_list' %}" class="btn btn-light ms-1">İptal</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

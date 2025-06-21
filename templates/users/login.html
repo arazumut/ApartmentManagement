@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Giriş - Apartman Yönetim Sistemi{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-xxl-4 col-lg-5">
+        <div class="card">
+            <div class="card-header py-4 text-center bg-primary">
+                <a href="{% url 'home' %}">
+                    <span><img src="{% static 'images/logo-light.png' %}" alt="logo" height="22"></span>
+                </a>
+            </div>
+
+            <div class="card-body p-4">
+                <div class="text-center w-75 m-auto">
+                    <h4 class="text-dark-50 text-center pb-0 fw-bold">Giriş Yap</h4>
+                    <p class="text-muted mb-4">Lütfen e-posta adresinizi ve şifrenizi giriniz.</p>
+                </div>
+
+                {% if messages %}
+                <div class="alert alert-danger" role="alert">
+                    {% for message in messages %}
+                    {{ message }}
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                <form action="{% url 'login' %}" method="POST">
+                    {% csrf_token %}
+                    
+                    <div class="mb-3">
+                        <label for="email" class="form-label">E-posta</label>
+                        <input class="form-control" type="email" id="email" name="email" required placeholder="E-posta adresinizi giriniz">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Şifre</label>
+                        <div class="input-group input-group-merge">
+                            <input type="password" id="password" name="password" class="form-control" placeholder="Şifrenizi giriniz">
+                            <div class="input-group-text" data-password="false">
+                                <span class="password-eye"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3 mb-3">
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="checkbox-signin" checked>
+                            <label class="form-check-label" for="checkbox-signin">Beni Hatırla</label>
+                        </div>
+                    </div>
+
+                    <div class="mb-3 mb-0 text-center">
+                        <button class="btn btn-primary" type="submit"> Giriş Yap </button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+
+        <div class="row mt-3">
+            <div class="col-12 text-center">
+                <p class="text-muted">Hesabınız yok mu? <a href="{% url 'register' %}" class="text-muted ms-1"><b>Kayıt Ol</b></a></p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

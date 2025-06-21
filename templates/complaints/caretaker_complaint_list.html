@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Assigned Complaints" %}{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box">
+                <div class="page-title-right">
+                    <ol class="breadcrumb m-0">
+                        <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">{% trans "Dashboard" %}</a></li>
+                        <li class="breadcrumb-item active">{% trans "Assigned Complaints" %}</li>
+                    </ol>
+                </div>
+                <h4 class="page-title">{% trans "Assigned Complaints" %}</h4>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">{% trans "Complaints Assigned to Me" %}</h4>
+                </div>
+                <div class="card-body">
+                    {% if complaints %}
+                    <div class="table-responsive">
+                        <table class="table table-centered table-nowrap mb-0">
+                            <thead>
+                                <tr>
+                                    <th>{% trans "Building" %}</th>
+                                    <th>{% trans "Apartment" %}</th>
+                                    <th>{% trans "Title" %}</th>
+                                    <th>{% trans "Category" %}</th>
+                                    <th>{% trans "Status" %}</th>
+                                    <th>{% trans "Priority" %}</th>
+                                    <th>{% trans "Created At" %}</th>
+                                    <th>{% trans "Actions" %}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for complaint in complaints %}
+                                <tr>
+                                    <td>{{ complaint.building.name }}</td>
+                                    <td>{{ complaint.apartment.number }}</td>
+                                    <td>{{ complaint.title }}</td>
+                                    <td>{{ complaint.get_category_display }}</td>
+                                    <td>
+                                        {% if complaint.status == 'new' %}
+                                        <span class="badge bg-info">{% trans "New" %}</span>
+                                        {% elif complaint.status == 'in_progress' %}
+                                        <span class="badge bg-warning">{% trans "In Progress" %}</span>
+                                        {% elif complaint.status == 'resolved' %}
+                                        <span class="badge bg-success">{% trans "Resolved" %}</span>
+                                        {% elif complaint.status == 'rejected' %}
+                                        <span class="badge bg-danger">{% trans "Rejected" %}</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% for i in "12345"|make_list %}
+                                            {% if forloop.counter <= complaint.priority %}
+                                            <i class="ri-star-fill text-warning"></i>
+                                            {% else %}
+                                            <i class="ri-star-line text-muted"></i>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </td>
+                                    <td>{{ complaint.created_at|date:"d M Y" }}</td>
+                                    <td>
+                                        <a href="{% url 'complaint_detail' complaint.pk %}" class="btn btn-sm btn-info">
+                                            <i class="ri-eye-line"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="text-center p-4">
+                        <p class="text-muted">{% trans "No complaints are assigned to you." %}</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Ana Sayfa - Apartman Yönetim Sistemi{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body p-4">
+                <div class="row">
+                    <div class="col-lg-7">
+                        <div class="text-center text-lg-start">
+                            <h1 class="display-6 fw-normal text-dark mb-3">Apartman Yönetim Sistemi</h1>
+                            <p class="text-muted">
+                                Apartmanınızın yönetimini dijitalleştirin, aidat, şikayet ve duyuruları tek platform üzerinden yönetin.
+                            </p>
+                            <a href="{% url 'login' %}" class="btn btn-primary rounded-pill mt-2">Giriş Yap</a>
+                            <a href="{% url 'register' %}" class="btn btn-light rounded-pill mt-2 ms-1">Kayıt Ol</a>
+                        </div>
+                    </div>
+                    <div class="col-lg-5">
+                        <div class="text-center">
+                            <img src="{% static 'images/building.svg' %}" alt="Apartman" class="img-fluid">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row my-4">
+    <div class="col-12 text-center">
+        <h2 class="mb-4">Özelliklerimiz</h2>
+    </div>
+</div>
+
+<div class="row row-cols-1 row-cols-md-3 g-3">
+    <div class="col">
+        <div class="card h-100">
+            <div class="card-body text-center">
+                <div class="mb-3">
+                    <i class="ri-money-dollar-circle-line text-primary" style="font-size: 3rem;"></i>
+                </div>
+                <h4 class="card-title">Aidat Yönetimi</h4>
+                <p class="card-text">Aidatları kolayca oluşturun, takip edin ve ödemeleri alın.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="card h-100">
+            <div class="card-body text-center">
+                <div class="mb-3">
+                    <i class="ri-notification-3-line text-danger" style="font-size: 3rem;"></i>
+                </div>
+                <h4 class="card-title">Duyuru Sistemi</h4>
+                <p class="card-text">Tüm bina sakinlerine anlık duyurular gönderin.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="card h-100">
+            <div class="card-body text-center">
+                <div class="mb-3">
+                    <i class="ri-feedback-line text-warning" style="font-size: 3rem;"></i>
+                </div>
+                <h4 class="card-title">Şikayet Takibi</h4>
+                <p class="card-text">Şikayetleri kaydedin, yönetin ve çözüme kavuşturun.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="card h-100">
+            <div class="card-body text-center">
+                <div class="mb-3">
+                    <i class="ri-building-line text-info" style="font-size: 3rem;"></i>
+                </div>
+                <h4 class="card-title">Bina & Daire Bilgileri</h4>
+                <p class="card-text">Binalarınızı ve dairelerinizi dijital ortamda yönetin.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="card h-100">
+            <div class="card-body text-center">
+                <div class="mb-3">
+                    <i class="ri-exchange-dollar-line text-success" style="font-size: 3rem;"></i>
+                </div>
+                <h4 class="card-title">Gider Yönetimi</h4>
+                <p class="card-text">Bina giderlerini takip edin ve raporları görüntüleyin.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="card h-100">
+            <div class="card-body text-center">
+                <div class="mb-3">
+                    <i class="ri-inbox-archive-line text-secondary" style="font-size: 3rem;"></i>
+                </div>
+                <h4 class="card-title">Paket & Ziyaretçi Takibi</h4>
+                <p class="card-text">Gelen paketleri ve ziyaretçileri kaydedin, takip edin.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

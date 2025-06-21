@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Announcement Details" %}{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box">
+                <div class="page-title-right">
+                    <ol class="breadcrumb m-0">
+                        <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">{% trans "Dashboard" %}</a></li>
+                        <li class="breadcrumb-item"><a href="{% url 'announcement_list' %}">{% trans "Announcements" %}</a></li>
+                        <li class="breadcrumb-item active">{% trans "Details" %}</li>
+                    </ol>
+                </div>
+                <h4 class="page-title">{% trans "Announcement Details" %}</h4>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <h4 class="card-title">{{ announcement.title }}</h4>
+                        </div>
+                        <div class="col-auto">
+                            {% if user.is_staff or user.is_superuser %}
+                            <a href="{% url 'announcement_update' announcement.pk %}" class="btn btn-warning">
+                                <i class="ri-pencil-line"></i> {% trans "Edit" %}
+                            </a>
+                            {% endif %}
+                            <a href="{% url 'announcement_list' %}" class="btn btn-secondary">
+                                <i class="ri-arrow-left-line"></i> {% trans "Back to List" %}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="mb-3">
+                                <h5>{% trans "Building" %}</h5>
+                                <p>{{ announcement.building.name }}</p>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <h5>{% trans "Content" %}</h5>
+                                <div class="p-3 bg-light rounded">
+                                    <p>{{ announcement.content|linebreaks }}</p>
+                                </div>
+                            </div>
+                            
+                            <div class="row mb-3">
+                                <div class="col-md-4">
+                                    <h5>{% trans "Priority" %}</h5>
+                                    <p>
+                                        {% if announcement.priority == 'normal' %}
+                                        <span class="badge bg-primary">{% trans "Normal" %}</span>
+                                        {% elif announcement.priority == 'important' %}
+                                        <span class="badge bg-warning">{% trans "Important" %}</span>
+                                        {% elif announcement.priority == 'urgent' %}
+                                        <span class="badge bg-danger">{% trans "Urgent" %}</span>
+                                        {% endif %}
+                                    </p>
+                                </div>
+                                <div class="col-md-4">
+                                    <h5>{% trans "Created By" %}</h5>
+                                    <p>{{ announcement.created_by.get_full_name }}</p>
+                                </div>
+                                <div class="col-md-4">
+                                    <h5>{% trans "Created At" %}</h5>
+                                    <p>{{ announcement.created_at|date:"d M Y H:i" }}</p>
+                                </div>
+                            </div>
+                            
+                            {% if announcement.attachment %}
+                            <div class="mb-3">
+                                <h5>{% trans "Attachment" %}</h5>
+                                <p>
+                                    <a href="{{ announcement.attachment.url }}" class="btn btn-sm btn-primary" target="_blank">
+                                        <i class="ri-download-line"></i> {% trans "Download Attachment" %}
+                                    </a>
+                                </p>
+                            </div>
+                            {% endif %}
+                            
+                            {% if not has_read %}
+                            <div class="mb-3 mt-4 text-center">
+                                <form method="post" action="{% url 'read_announcement' announcement.pk %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-success">
+                                        <i class="ri-check-double-line"></i> {% trans "Mark as Read" %}
+                                    </button>
+                                </form>
+                            </div>
+                            {% else %}
+                            <div class="mb-3 mt-4 text-center">
+                                <span class="badge bg-success">{% trans "You have read this announcement" %}</span>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

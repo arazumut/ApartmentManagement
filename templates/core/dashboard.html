@@ -1,0 +1,547 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Dashboard - Apartman Yönetim Sistemi{% endblock %}
+
+{% block page_title %}Dashboard{% endblock %}
+
+{% block content %}
+{% if user.is_admin %}
+<!-- Admin Dashboard -->
+<div class="row row-cols-xxl-4 row-cols-md-2 row-cols-1">
+    <div class="col">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="flex-grow-1 overflow-hidden">
+                        <h5 class="text-muted fw-normal mt-0" title="Buildings">Binalar</h5>
+                        <h3 class="my-3">{{ buildings.count }}</h3>
+                        <p class="mb-0 text-muted text-truncate">
+                            <span class="text-success me-2"><i class="ri-building-line"></i></span>
+                            <span>Toplam Bina</span>
+                        </p>
+                    </div>
+                    <div class="flex-shrink-0">
+                        <div class="avatar-sm">
+                            <span class="avatar-title bg-soft-primary rounded">
+                                <i class="ri-building-4-line fs-24 text-primary"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="flex-grow-1 overflow-hidden">
+                        <h5 class="text-muted fw-normal mt-0" title="Aidatlar">Aylık Aidat</h5>
+                        <h3 class="my-3">{{ total_dues|floatformat:2 }}₺</h3>
+                        <p class="mb-0 text-muted text-truncate">
+                            <span class="text-success me-2"><i class="ri-money-dollar-circle-line"></i></span>
+                            <span>Bu Ayki Toplam</span>
+                        </p>
+                    </div>
+                    <div class="flex-shrink-0">
+                        <div class="avatar-sm">
+                            <span class="avatar-title bg-soft-success rounded">
+                                <i class="ri-money-dollar-circle-line fs-24 text-success"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="flex-grow-1 overflow-hidden">
+                        <h5 class="text-muted fw-normal mt-0" title="Giderler">Aylık Gider</h5>
+                        <h3 class="my-3">{{ total_expenses|floatformat:2 }}₺</h3>
+                        <p class="mb-0 text-muted text-truncate">
+                            <span class="text-danger me-2"><i class="ri-exchange-dollar-line"></i></span>
+                            <span>Bu Ayki Toplam</span>
+                        </p>
+                    </div>
+                    <div class="flex-shrink-0">
+                        <div class="avatar-sm">
+                            <span class="avatar-title bg-soft-danger rounded">
+                                <i class="ri-exchange-dollar-line fs-24 text-danger"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="flex-grow-1 overflow-hidden">
+                        <h5 class="text-muted fw-normal mt-0" title="Şikayetler">Açık Şikayetler</h5>
+                        <h3 class="my-3">{{ pending_complaints }}</h3>
+                        <p class="mb-0 text-muted text-truncate">
+                            <span class="text-warning me-2"><i class="ri-feedback-line"></i></span>
+                            <span>Bekleyen Şikayetler</span>
+                        </p>
+                    </div>
+                    <div class="flex-shrink-0">
+                        <div class="avatar-sm">
+                            <span class="avatar-title bg-soft-warning rounded">
+                                <i class="ri-feedback-line fs-24 text-warning"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-xl-8">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h4 class="header-title">Son Duyurular</h4>
+                <a href="{% url 'announcement_list' %}" class="btn btn-sm btn-soft-secondary">Tümünü Gör</a>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-centered mb-0">
+                        <thead>
+                            <tr>
+                                <th>Başlık</th>
+                                <th>Bina</th>
+                                <th>Tarih</th>
+                                <th>Öncelik</th>
+                                <th>Durum</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for announcement in recent_announcements %}
+                            <tr>
+                                <td>{{ announcement.title }}</td>
+                                <td>{{ announcement.building.name }}</td>
+                                <td>{{ announcement.created_at|date:"d/m/Y" }}</td>
+                                <td>
+                                    {% if announcement.priority == 'normal' %}
+                                    <span class="badge bg-info">Normal</span>
+                                    {% elif announcement.priority == 'important' %}
+                                    <span class="badge bg-warning">Önemli</span>
+                                    {% elif announcement.priority == 'urgent' %}
+                                    <span class="badge bg-danger">Acil</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if announcement.is_active %}
+                                    <span class="badge bg-success">Aktif</span>
+                                    {% else %}
+                                    <span class="badge bg-secondary">Pasif</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="5" class="text-center">Henüz duyuru bulunmuyor</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-4">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h4 class="header-title">Binalar</h4>
+                <a href="{% url 'building_list' %}" class="btn btn-sm btn-soft-secondary">Tümünü Gör</a>
+            </div>
+            <div class="card-body pt-0">
+                {% for building in buildings %}
+                <div class="d-flex align-items-center border-bottom py-3">
+                    <div class="avatar-sm">
+                        <span class="avatar-title bg-soft-primary rounded">
+                            <i class="ri-building-line fs-20 text-primary"></i>
+                        </span>
+                    </div>
+                    <div class="flex-grow-1 ms-3">
+                        <h5 class="fs-15 my-1">{{ building.name }}</h5>
+                        <p class="text-muted mb-0">{{ building.address|truncatechars:50 }}</p>
+                    </div>
+                    <a href="{% url 'building_detail' building.id %}" class="btn btn-sm btn-soft-info">Detay</a>
+                </div>
+                {% empty %}
+                <div class="text-center py-3">
+                    <p class="text-muted mb-0">Henüz bina bulunmuyor</p>
+                    <a href="{% url 'building_create' %}" class="btn btn-sm btn-primary mt-2">Bina Ekle</a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% elif user.is_resident %}
+<!-- Resident Dashboard -->
+<div class="row row-cols-xxl-3 row-cols-md-2 row-cols-1">
+    <div class="col">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="flex-grow-1 overflow-hidden">
+                        <h5 class="text-muted fw-normal mt-0" title="Daireler">Dairelerim</h5>
+                        <h3 class="my-3">{{ apartments.count }}</h3>
+                        <p class="mb-0 text-muted text-truncate">
+                            <span class="text-success me-2"><i class="ri-home-4-line"></i></span>
+                            <span>Sahip/Kiracı Olunan</span>
+                        </p>
+                    </div>
+                    <div class="flex-shrink-0">
+                        <div class="avatar-sm">
+                            <span class="avatar-title bg-soft-primary rounded">
+                                <i class="ri-home-4-line fs-24 text-primary"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="flex-grow-1 overflow-hidden">
+                        <h5 class="text-muted fw-normal mt-0" title="Aidatlar">Ödenmemiş Aidat</h5>
+                        <h3 class="my-3">{{ unpaid_dues.count }}</h3>
+                        <p class="mb-0 text-muted text-truncate">
+                            <span class="text-danger me-2"><i class="ri-money-dollar-circle-line"></i></span>
+                            <span>Bekleyen Ödemeler</span>
+                        </p>
+                    </div>
+                    <div class="flex-shrink-0">
+                        <div class="avatar-sm">
+                            <span class="avatar-title bg-soft-danger rounded">
+                                <i class="ri-money-dollar-circle-line fs-24 text-danger"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="flex-grow-1 overflow-hidden">
+                        <h5 class="text-muted fw-normal mt-0" title="Duyurular">Okunmamış Duyuru</h5>
+                        <h3 class="my-3">{{ unread_announcements.count }}</h3>
+                        <p class="mb-0 text-muted text-truncate">
+                            <span class="text-info me-2"><i class="ri-notification-2-line"></i></span>
+                            <span>Yeni Duyurular</span>
+                        </p>
+                    </div>
+                    <div class="flex-shrink-0">
+                        <div class="avatar-sm">
+                            <span class="avatar-title bg-soft-info rounded">
+                                <i class="ri-notification-2-line fs-24 text-info"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-xl-6">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h4 class="header-title">Ödenmemiş Aidatlar</h4>
+                <a href="{% url 'resident_dues_list' %}" class="btn btn-sm btn-soft-secondary">Tümünü Gör</a>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-centered mb-0">
+                        <thead>
+                            <tr>
+                                <th>Daire</th>
+                                <th>Dönem</th>
+                                <th>Tutar</th>
+                                <th>Son Ödeme</th>
+                                <th>Durum</th>
+                                <th>İşlem</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for dues in unpaid_dues %}
+                            <tr>
+                                <td>{{ dues.apartment }}</td>
+                                <td>{{ dues.dues.month }}/{{ dues.dues.year }}</td>
+                                <td>{{ dues.amount|floatformat:2 }}₺</td>
+                                <td>{{ dues.due_date|date:"d/m/Y" }}</td>
+                                <td>
+                                    {% if dues.status == 'unpaid' %}
+                                    <span class="badge bg-warning">Ödenmedi</span>
+                                    {% elif dues.status == 'partial' %}
+                                    <span class="badge bg-info">Kısmi Ödeme</span>
+                                    {% elif dues.status == 'overdue' %}
+                                    <span class="badge bg-danger">Gecikmiş</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <a href="{% url 'pay_dues' dues.id %}" class="btn btn-sm btn-primary">Öde</a>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="6" class="text-center">Ödenmemiş aidat bulunmuyor</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-6">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h4 class="header-title">Okunmamış Duyurular</h4>
+                <a href="{% url 'resident_announcement_list' %}" class="btn btn-sm btn-soft-secondary">Tümünü Gör</a>
+            </div>
+            <div class="card-body">
+                {% for announcement in unread_announcements %}
+                <div class="d-flex align-items-start border-bottom pb-3 mb-3">
+                    <div class="avatar-sm">
+                        {% if announcement.priority == 'normal' %}
+                        <span class="avatar-title bg-soft-info rounded">
+                            <i class="ri-notification-2-line fs-20 text-info"></i>
+                        </span>
+                        {% elif announcement.priority == 'important' %}
+                        <span class="avatar-title bg-soft-warning rounded">
+                            <i class="ri-notification-2-line fs-20 text-warning"></i>
+                        </span>
+                        {% elif announcement.priority == 'urgent' %}
+                        <span class="avatar-title bg-soft-danger rounded">
+                            <i class="ri-notification-2-line fs-20 text-danger"></i>
+                        </span>
+                        {% endif %}
+                    </div>
+                    <div class="flex-grow-1 ms-3">
+                        <h5 class="fs-15 my-1">{{ announcement.title }}</h5>
+                        <p class="text-muted mb-1">{{ announcement.content|truncatechars:100 }}</p>
+                        <small class="text-muted">{{ announcement.created_at|date:"d/m/Y H:i" }}</small>
+                    </div>
+                    <div>
+                        <a href="{% url 'read_announcement' announcement.id %}" class="btn btn-sm btn-soft-info">Oku</a>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="text-center py-3">
+                    <p class="text-muted mb-0">Okunmamış duyuru bulunmuyor</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% elif user.is_caretaker %}
+<!-- Caretaker Dashboard -->
+<div class="row row-cols-xxl-3 row-cols-md-2 row-cols-1">
+    <div class="col">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="flex-grow-1 overflow-hidden">
+                        <h5 class="text-muted fw-normal mt-0" title="Görevler">Bekleyen Görevler</h5>
+                        <h3 class="my-3">{{ pending_tasks.count }}</h3>
+                        <p class="mb-0 text-muted text-truncate">
+                            <span class="text-warning me-2"><i class="ri-task-line"></i></span>
+                            <span>Yapılması Gereken</span>
+                        </p>
+                    </div>
+                    <div class="flex-shrink-0">
+                        <div class="avatar-sm">
+                            <span class="avatar-title bg-soft-warning rounded">
+                                <i class="ri-task-line fs-24 text-warning"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="flex-grow-1 overflow-hidden">
+                        <h5 class="text-muted fw-normal mt-0" title="Şikayetler">Açık Şikayetler</h5>
+                        <h3 class="my-3">{{ assigned_complaints.count }}</h3>
+                        <p class="mb-0 text-muted text-truncate">
+                            <span class="text-danger me-2"><i class="ri-feedback-line"></i></span>
+                            <span>Atanan Şikayetler</span>
+                        </p>
+                    </div>
+                    <div class="flex-shrink-0">
+                        <div class="avatar-sm">
+                            <span class="avatar-title bg-soft-danger rounded">
+                                <i class="ri-feedback-line fs-24 text-danger"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="flex-grow-1 overflow-hidden">
+                        <h5 class="text-muted fw-normal mt-0" title="Paketler">Bekleyen Paketler</h5>
+                        <h3 class="my-3">{{ pending_packages }}</h3>
+                        <p class="mb-0 text-muted text-truncate">
+                            <span class="text-info me-2"><i class="ri-inbox-archive-line"></i></span>
+                            <span>Teslim Edilmemiş</span>
+                        </p>
+                    </div>
+                    <div class="flex-shrink-0">
+                        <div class="avatar-sm">
+                            <span class="avatar-title bg-soft-info rounded">
+                                <i class="ri-inbox-archive-line fs-24 text-info"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-xl-6">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h4 class="header-title">Bekleyen Görevler</h4>
+                <a href="{% url 'caretaker_task_list' %}" class="btn btn-sm btn-soft-secondary">Tümünü Gör</a>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-centered mb-0">
+                        <thead>
+                            <tr>
+                                <th>Görev</th>
+                                <th>Öncelik</th>
+                                <th>Son Tarih</th>
+                                <th>Durum</th>
+                                <th>İşlem</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for task in pending_tasks %}
+                            <tr>
+                                <td>{{ task.title }}</td>
+                                <td>
+                                    {% if task.priority == 1 %}
+                                    <span class="badge bg-info">Düşük</span>
+                                    {% elif task.priority == 2 %}
+                                    <span class="badge bg-primary">Normal</span>
+                                    {% elif task.priority == 3 %}
+                                    <span class="badge bg-warning">Orta</span>
+                                    {% elif task.priority == 4 %}
+                                    <span class="badge bg-danger">Yüksek</span>
+                                    {% elif task.priority == 5 %}
+                                    <span class="badge bg-dark">Kritik</span>
+                                    {% endif %}
+                                </td>
+                                <td>{{ task.due_date|date:"d/m/Y H:i" }}</td>
+                                <td>
+                                    {% if task.status == 'pending' %}
+                                    <span class="badge bg-warning">Bekliyor</span>
+                                    {% elif task.status == 'in_progress' %}
+                                    <span class="badge bg-info">Devam Ediyor</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <a href="{% url 'task_detail' task.id %}" class="btn btn-sm btn-primary">Görüntüle</a>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="5" class="text-center">Bekleyen görev bulunmuyor</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-6">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h4 class="header-title">Atanan Şikayetler</h4>
+                <a href="{% url 'caretaker_complaint_list' %}" class="btn btn-sm btn-soft-secondary">Tümünü Gör</a>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-centered mb-0">
+                        <thead>
+                            <tr>
+                                <th>Konu</th>
+                                <th>Daire</th>
+                                <th>Kategori</th>
+                                <th>Durum</th>
+                                <th>İşlem</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for complaint in assigned_complaints %}
+                            <tr>
+                                <td>{{ complaint.title }}</td>
+                                <td>{{ complaint.apartment }}</td>
+                                <td>{{ complaint.get_category_display }}</td>
+                                <td>
+                                    {% if complaint.status == 'new' %}
+                                    <span class="badge bg-info">Yeni</span>
+                                    {% elif complaint.status == 'in_progress' %}
+                                    <span class="badge bg-warning">Devam Ediyor</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <a href="{% url 'complaint_detail' complaint.id %}" class="btn btn-sm btn-primary">Görüntüle</a>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="5" class="text-center">Atanan şikayet bulunmuyor</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

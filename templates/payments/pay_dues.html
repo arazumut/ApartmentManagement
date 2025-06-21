@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+
+{% block title %}Aidat Öde{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box">
+                <h4 class="page-title">Aidat Öde</h4>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="header-title">Aidat Ödeme</h4>
+                    
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <div class="table-responsive">
+                                <table class="table table-sm">
+                                    <tbody>
+                                        <tr>
+                                            <th>Bina:</th>
+                                            <td>{{ object.apartment.building.name }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Daire:</th>
+                                            <td>{{ object.apartment.number }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Dönem:</th>
+                                            <td>{{ object.dues.month }}/{{ object.dues.year }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Tutar:</th>
+                                            <td>{{ object.amount }}₺</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Son Ödeme Tarihi:</th>
+                                            <td>{{ object.due_date }}</td>
+                                        </tr>
+                                        {% if object.late_fee > 0 %}
+                                        <tr>
+                                            <th>Gecikme Zammı:</th>
+                                            <td>{{ object.late_fee }}₺</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Toplam Ödenecek:</th>
+                                            <td>{{ object.total_amount }}₺</td>
+                                        </tr>
+                                        {% endif %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="{{ form.payment_method.id_for_label }}" class="form-label">Ödeme Yöntemi</label>
+                                    {{ form.payment_method }}
+                                    {% if form.payment_method.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        {{ form.payment_method.errors }}
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="{{ form.payment_reference.id_for_label }}" class="form-label">Ödeme Referansı</label>
+                                    {{ form.payment_reference }}
+                                    {% if form.payment_reference.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        {{ form.payment_reference.errors }}
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-3">
+                            <button type="submit" class="btn btn-primary">Ödeme Yap</button>
+                            <a href="{% url 'resident_dues_list' %}" class="btn btn-secondary">İptal</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,200 @@
+{% load static %}
+<!-- Sidenav Menu Start -->
+<div class="sidenav-menu">
+    <!-- Brand Logo -->
+    <a href="{% url 'home' %}" class="logo">
+        <span class="logo-light">
+            <span class="logo-lg"><img src="{% static 'images/logo.png' %}" alt="logo"></span>
+            <span class="logo-sm"><img src="{% static 'images/logo-sm.png' %}" alt="small logo"></span>
+        </span>
+
+        <span class="logo-dark">
+            <span class="logo-lg"><img src="{% static 'images/logo-dark.png' %}" alt="dark logo"></span>
+            <span class="logo-sm"><img src="{% static 'images/logo-sm.png' %}" alt="small logo"></span>
+        </span>
+    </a>
+
+    <!-- Sidebar Hover Menu Toggle Button -->
+    <button class="button-sm-hover">
+        <i class="ri-circle-line align-middle"></i>
+    </button>
+
+    <!-- Full Sidebar Menu Close Button -->
+    <button class="button-close-fullsidebar">
+        <i class="ti ti-x align-middle"></i>
+    </button>
+
+    <div data-simplebar>
+        <!--- Sidenav Menu -->
+        <ul class="side-nav">
+            <li class="side-nav-title">
+                Menü
+            </li>
+
+            <li class="side-nav-item">
+                <a href="{% url 'dashboard' %}" class="side-nav-link">
+                    <i class="ri-dashboard-line"></i>
+                    <span> Ana Sayfa </span>
+                </a>
+            </li>
+
+            {% if user.is_authenticated %}
+                {% if user.is_admin %}
+                    <li class="side-nav-item">
+                        <a href="{% url 'building_list' %}" class="side-nav-link">
+                            <i class="ri-building-line"></i>
+                            <span> Binalar </span>
+                        </a>
+                    </li>
+
+                    <li class="side-nav-item">
+                        <a href="{% url 'apartment_list' %}" class="side-nav-link">
+                            <i class="ri-home-4-line"></i>
+                            <span> Daireler </span>
+                        </a>
+                    </li>
+
+                    <li class="side-nav-item">
+                        <a href="{% url 'dues_list' %}" class="side-nav-link">
+                            <i class="ri-money-dollar-box-line"></i>
+                            <span> Aidatlar </span>
+                        </a>
+                    </li>
+
+                    <li class="side-nav-item">
+                        <a href="{% url 'expense_list' %}" class="side-nav-link">
+                            <i class="ri-exchange-dollar-line"></i>
+                            <span> Giderler </span>
+                        </a>
+                    </li>
+
+                    <li class="side-nav-item">
+                        <a href="{% url 'announcement_list' %}" class="side-nav-link">
+                            <i class="ri-notification-2-line"></i>
+                            <span> Duyurular </span>
+                        </a>
+                    </li>
+
+                    <li class="side-nav-item">
+                        <a href="{% url 'complaint_list' %}" class="side-nav-link">
+                            <i class="ri-feedback-line"></i>
+                            <span> Şikayetler </span>
+                        </a>
+                    </li>
+
+                    <li class="side-nav-item">
+                        <a href="{% url 'task_list' %}" class="side-nav-link">
+                            <i class="ri-task-line"></i>
+                            <span> Görevler </span>
+                        </a>
+                    </li>
+                {% endif %}
+
+                {% if user.is_resident %}
+                    <li class="side-nav-item">
+                        <a href="{% url 'resident_apartment_list' %}" class="side-nav-link">
+                            <i class="ri-home-4-line"></i>
+                            <span> Dairelerim </span>
+                        </a>
+                    </li>
+
+                    <li class="side-nav-item">
+                        <a href="{% url 'resident_dues_list' %}" class="side-nav-link">
+                            <i class="ri-money-dollar-box-line"></i>
+                            <span> Aidatlarım </span>
+                        </a>
+                    </li>
+
+                    <li class="side-nav-item">
+                        <a href="{% url 'resident_announcement_list' %}" class="side-nav-link">
+                            <i class="ri-notification-2-line"></i>
+                            <span> Duyurular </span>
+                        </a>
+                    </li>
+
+                    <li class="side-nav-item">
+                        <a href="{% url 'resident_complaint_list' %}" class="side-nav-link">
+                            <i class="ri-feedback-line"></i>
+                            <span> Şikayetlerim </span>
+                        </a>
+                    </li>
+
+                    <li class="side-nav-item">
+                        <a href="{% url 'resident_package_list' %}" class="side-nav-link">
+                            <i class="ri-inbox-archive-line"></i>
+                            <span> Paketlerim </span>
+                        </a>
+                    </li>
+                {% endif %}
+
+                {% if user.is_caretaker %}
+                    <li class="side-nav-item">
+                        <a href="{% url 'caretaker_task_list' %}" class="side-nav-link">
+                            <i class="ri-task-line"></i>
+                            <span> Görevlerim </span>
+                        </a>
+                    </li>
+
+                    <li class="side-nav-item">
+                        <a href="{% url 'caretaker_complaint_list' %}" class="side-nav-link">
+                            <i class="ri-feedback-line"></i>
+                            <span> Şikayetler </span>
+                        </a>
+                    </li>
+
+                    <li class="side-nav-item">
+                        <a href="{% url 'package_list' %}" class="side-nav-link">
+                            <i class="ri-inbox-archive-line"></i>
+                            <span> Paketler </span>
+                        </a>
+                    </li>
+
+                    <li class="side-nav-item">
+                        <a href="{% url 'visitor_list' %}" class="side-nav-link">
+                            <i class="ri-user-follow-line"></i>
+                            <span> Ziyaretçiler </span>
+                        </a>
+                    </li>
+                {% endif %}
+
+                <li class="side-nav-item">
+                    <a href="{% url 'profile' %}" class="side-nav-link">
+                        <i class="ri-user-settings-line"></i>
+                        <span> Profilim </span>
+                    </a>
+                </li>
+
+                <li class="side-nav-item">
+                    <a href="{% url 'logout' %}" class="side-nav-link">
+                        <i class="ri-logout-box-line"></i>
+                        <span> Çıkış </span>
+                    </a>
+                </li>
+            {% else %}
+                <li class="side-nav-item">
+                    <a href="{% url 'login' %}" class="side-nav-link">
+                        <i class="ri-login-box-line"></i>
+                        <span> Giriş </span>
+                    </a>
+                </li>
+
+                <li class="side-nav-item">
+                    <a href="{% url 'register' %}" class="side-nav-link">
+                        <i class="ri-user-add-line"></i>
+                        <span> Kayıt Ol </span>
+                    </a>
+                </li>
+            {% endif %}
+        </ul>
+
+        <!-- Help Box -->
+        <div class="help-box text-center">
+            <h5 class="fw-semibold fs-16">Yardıma mı ihtiyacınız var?</h5>
+            <p class="mb-3 text-muted">Herhangi bir sorunda destek ekibimizle iletişime geçin</p>
+            <a href="mailto:support@apartman.com" class="btn btn-primary btn-sm">İletişim</a>
+        </div>
+
+        <div class="clearfix"></div>
+    </div>
+</div>
+<!-- Sidenav Menu End -->

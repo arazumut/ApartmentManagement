@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}Aidatlar{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box">
+                <h4 class="page-title">Aidatlar</h4>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row mb-2">
+                        <div class="col-sm-4">
+                            <a href="{% url 'dues_create' %}" class="btn btn-danger mb-2">
+                                <i class="ri-add-line mr-1"></i> Yeni Aidat Ekle
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table table-centered table-nowrap table-hover mb-0">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Bina</th>
+                                    <th>Daire</th>
+                                    <th>Ay</th>
+                                    <th>Tutar</th>
+                                    <th>Ödeme Durumu</th>
+                                    <th>İşlemler</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td colspan="7" class="text-center">
+                                        Henüz kayıtlı aidat bulunmamaktadır.
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+
+{% block title %}Aidat Ekle/Düzenle{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box">
+                <h4 class="page-title">
+                    {% if form.instance.pk %}
+                    Aidat Düzenle
+                    {% else %}
+                    Yeni Aidat Ekle
+                    {% endif %}
+                </h4>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="{{ form.building.id_for_label }}" class="form-label">Bina</label>
+                                    {{ form.building }}
+                                    {% if form.building.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        {{ form.building.errors }}
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="{{ form.amount.id_for_label }}" class="form-label">Tutar</label>
+                                    {{ form.amount }}
+                                    {% if form.amount.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        {{ form.amount.errors }}
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label for="{{ form.month.id_for_label }}" class="form-label">Ay</label>
+                                    {{ form.month }}
+                                    {% if form.month.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        {{ form.month.errors }}
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label for="{{ form.year.id_for_label }}" class="form-label">Yıl</label>
+                                    {{ form.year }}
+                                    {% if form.year.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        {{ form.year.errors }}
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label for="{{ form.due_date.id_for_label }}" class="form-label">Son Ödeme Tarihi</label>
+                                    {{ form.due_date }}
+                                    {% if form.due_date.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        {{ form.due_date.errors }}
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="{{ form.late_fee_percentage.id_for_label }}" class="form-label">Gecikme Zammı (%)</label>
+                                    {{ form.late_fee_percentage }}
+                                    {% if form.late_fee_percentage.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        {{ form.late_fee_percentage.errors }}
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="{{ form.description.id_for_label }}" class="form-label">Açıklama</label>
+                            {{ form.description }}
+                            {% if form.description.errors %}
+                            <div class="invalid-feedback d-block">
+                                {{ form.description.errors }}
+                            </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="mt-3">
+                            <button type="submit" class="btn btn-primary">
+                                {% if form.instance.pk %}
+                                Güncelle
+                                {% else %}
+                                Oluştur
+                                {% endif %}
+                            </button>
+                            <a href="{% url 'dues_list' %}" class="btn btn-secondary">İptal</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

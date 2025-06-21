@@ -1,0 +1,186 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}My Tasks{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box">
+                <h4 class="page-title">My Tasks</h4>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="header-title">Assigned Tasks</h4>
+                </div>
+                <div class="card-body">
+                    <ul class="nav nav-tabs mb-3">
+                        <li class="nav-item">
+                            <a href="#pending-tasks" data-bs-toggle="tab" aria-expanded="true" class="nav-link active">
+                                <span>Pending & In Progress</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#completed-tasks" data-bs-toggle="tab" aria-expanded="false" class="nav-link">
+                                <span>Completed</span>
+                            </a>
+                        </li>
+                    </ul>
+                    
+                    <div class="tab-content">
+                        <div class="tab-pane show active" id="pending-tasks">
+                            <div class="table-responsive">
+                                <table class="table table-centered table-hover mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th>Title</th>
+                                            <th>Building</th>
+                                            <th>Status</th>
+                                            <th>Priority</th>
+                                            <th>Due Date</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for task in tasks %}
+                                        {% if task.status == 'pending' or task.status == 'in_progress' %}
+                                        <tr>
+                                            <td><a href="{% url 'task_detail' task.pk %}">{{ task.title }}</a></td>
+                                            <td>{{ task.building.name }}</td>
+                                            <td>
+                                                {% if task.status == 'pending' %}
+                                                    <span class="badge badge-warning-lighten">Pending</span>
+                                                {% elif task.status == 'in_progress' %}
+                                                    <span class="badge badge-info-lighten">In Progress</span>
+                                                {% endif %}
+                                            </td>
+                                            <td>
+                                                <span class="badge {% if task.priority == 5 %}badge-danger{% elif task.priority == 4 %}badge-warning{% elif task.priority == 3 %}badge-info{% elif task.priority == 2 %}badge-primary{% else %}badge-secondary{% endif %}">
+                                                    {{ task.priority }}
+                                                </span>
+                                            </td>
+                                            <td>{{ task.due_date|date:"d M Y, H:i" }}</td>
+                                            <td>
+                                                <div class="dropdown">
+                                                    <button class="btn btn-sm btn-light dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                        Actions
+                                                    </button>
+                                                    <div class="dropdown-menu">
+                                                        <a class="dropdown-item" href="{% url 'task_detail' task.pk %}">View Details</a>
+                                                        <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#complete-task-modal-{{ task.pk }}">Mark as Complete</a>
+                                                        <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#upload-image-modal-{{ task.pk }}">Upload Image</a>
+                                                    </div>
+                                                </div>
+                                                
+                                                <!-- Complete Task Modal -->
+                                                <div class="modal fade" id="complete-task-modal-{{ task.pk }}" tabindex="-1" role="dialog" aria-hidden="true">
+                                                    <div class="modal-dialog modal-dialog-centered">
+                                                        <div class="modal-content">
+                                                            <form action="{% url 'complete_task' task.pk %}" method="post">
+                                                                {% csrf_token %}
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title">Complete Task: {{ task.title }}</h5>
+                                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <div class="mb-3">
+                                                                        <label for="completion-notes-{{ task.pk }}" class="form-label">Completion Notes</label>
+                                                                        <textarea class="form-control" id="completion-notes-{{ task.pk }}" name="completion_notes" rows="4" placeholder="Enter any notes about the task completion..."></textarea>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                                    <button type="submit" class="btn btn-success">Mark as Complete</button>
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                                <!-- Upload Image Modal -->
+                                                <div class="modal fade" id="upload-image-modal-{{ task.pk }}" tabindex="-1" role="dialog" aria-hidden="true">
+                                                    <div class="modal-dialog modal-dialog-centered">
+                                                        <div class="modal-content">
+                                                            <form action="{% url 'upload_task_image' task.pk %}" method="post" enctype="multipart/form-data">
+                                                                {% csrf_token %}
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title">Upload Image for: {{ task.title }}</h5>
+                                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <div class="mb-3">
+                                                                        <label for="task-image-{{ task.pk }}" class="form-label">Select Image</label>
+                                                                        <input type="file" class="form-control" id="task-image-{{ task.pk }}" name="image" accept="image/*">
+                                                                    </div>
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                                    <button type="submit" class="btn btn-primary">Upload</button>
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        {% endif %}
+                                        {% empty %}
+                                        <tr>
+                                            <td colspan="6" class="text-center">No pending tasks</td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="completed-tasks">
+                            <div class="table-responsive">
+                                <table class="table table-centered table-hover mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th>Title</th>
+                                            <th>Building</th>
+                                            <th>Priority</th>
+                                            <th>Completed Date</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for task in tasks %}
+                                        {% if task.status == 'completed' %}
+                                        <tr>
+                                            <td><a href="{% url 'task_detail' task.pk %}">{{ task.title }}</a></td>
+                                            <td>{{ task.building.name }}</td>
+                                            <td>
+                                                <span class="badge {% if task.priority == 5 %}badge-danger{% elif task.priority == 4 %}badge-warning{% elif task.priority == 3 %}badge-info{% elif task.priority == 2 %}badge-primary{% else %}badge-secondary{% endif %}">
+                                                    {{ task.priority }}
+                                                </span>
+                                            </td>
+                                            <td>{{ task.updated_at|date:"d M Y, H:i" }}</td>
+                                            <td>
+                                                <a href="{% url 'task_detail' task.pk %}" class="btn btn-sm btn-info">View Details</a>
+                                            </td>
+                                        </tr>
+                                        {% endif %}
+                                        {% empty %}
+                                        <tr>
+                                            <td colspan="5" class="text-center">No completed tasks</td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

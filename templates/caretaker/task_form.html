@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{% if form.instance.pk %}Edit Task{% else %}Add Task{% endif %}{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box">
+                <div class="page-title-right">
+                    <ol class="breadcrumb m-0">
+                        <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Dashboard</a></li>
+                        <li class="breadcrumb-item"><a href="{% url 'task_list' %}">Tasks</a></li>
+                        <li class="breadcrumb-item active">{% if form.instance.pk %}Edit Task{% else %}Add Task{% endif %}</li>
+                    </ol>
+                </div>
+                <h4 class="page-title">{% if form.instance.pk %}Edit Task{% else %}Add Task{% endif %}</h4>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="header-title">{% if form.instance.pk %}Edit Task: {{ form.instance.title }}{% else %}Add New Task{% endif %}</h4>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="{{ form.title.id_for_label }}" class="form-label">Title</label>
+                                    {{ form.title.errors }}
+                                    <input type="text" class="form-control" id="{{ form.title.id_for_label }}" name="{{ form.title.html_name }}" value="{{ form.title.value|default:'' }}">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="{{ form.building.id_for_label }}" class="form-label">Building</label>
+                                    {{ form.building.errors }}
+                                    {{ form.building }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="{{ form.description.id_for_label }}" class="form-label">Description</label>
+                            {{ form.description.errors }}
+                            <textarea class="form-control" id="{{ form.description.id_for_label }}" name="{{ form.description.html_name }}" rows="4">{{ form.description.value|default:'' }}</textarea>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="{{ form.assigned_to.id_for_label }}" class="form-label">Assigned To</label>
+                                    {{ form.assigned_to.errors }}
+                                    {{ form.assigned_to }}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="{{ form.priority.id_for_label }}" class="form-label">Priority</label>
+                                    {{ form.priority.errors }}
+                                    <select class="form-control" id="{{ form.priority.id_for_label }}" name="{{ form.priority.html_name }}">
+                                        <option value="1" {% if form.priority.value == 1 %}selected{% endif %}>1 (Lowest)</option>
+                                        <option value="2" {% if form.priority.value == 2 %}selected{% endif %}>2</option>
+                                        <option value="3" {% if form.priority.value == 3 %}selected{% endif %}>3</option>
+                                        <option value="4" {% if form.priority.value == 4 %}selected{% endif %}>4</option>
+                                        <option value="5" {% if form.priority.value == 5 %}selected{% endif %}>5 (Highest)</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        {% if form.instance.pk %}
+                        <div class="mb-3">
+                            <label for="{{ form.status.id_for_label }}" class="form-label">Status</label>
+                            {{ form.status.errors }}
+                            {{ form.status }}
+                        </div>
+                        {% endif %}
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="{{ form.due_date.id_for_label }}" class="form-label">Due Date</label>
+                                    {{ form.due_date.errors }}
+                                    <input type="datetime-local" class="form-control" id="{{ form.due_date.id_for_label }}" name="{{ form.due_date.html_name }}" value="{{ form.due_date.value|date:'Y-m-d\TH:i' }}">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="{{ form.frequency.id_for_label }}" class="form-label">Frequency</label>
+                                    {{ form.frequency.errors }}
+                                    {{ form.frequency }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="{{ form.recurrence_end_date.id_for_label }}" class="form-label">Recurrence End Date</label>
+                            {{ form.recurrence_end_date.errors }}
+                            <input type="date" class="form-control" id="{{ form.recurrence_end_date.id_for_label }}" name="{{ form.recurrence_end_date.html_name }}" value="{{ form.recurrence_end_date.value|date:'Y-m-d' }}">
+                            <small class="text-muted">Only applicable for recurring tasks</small>
+                        </div>
+
+                        <div class="text-end">
+                            <a href="{% url 'task_list' %}" class="btn btn-secondary me-2">Cancel</a>
+                            <button type="submit" class="btn btn-primary">Save Task</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

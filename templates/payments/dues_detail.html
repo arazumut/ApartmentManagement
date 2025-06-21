@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block title %}Aidat Detayı{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box">
+                <h4 class="page-title">Aidat Detayı</h4>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="header-title">{{ dues.building.name }} - {{ dues.month }}/{{ dues.year }}</h4>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <h5>Aidat Bilgileri</h5>
+                                <div class="table-responsive">
+                                    <table class="table table-sm">
+                                        <tbody>
+                                            <tr>
+                                                <th>Bina:</th>
+                                                <td>{{ dues.building.name }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Dönem:</th>
+                                                <td>{{ dues.month }}/{{ dues.year }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Tutar:</th>
+                                                <td>{{ dues.amount }}₺</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Son Ödeme Tarihi:</th>
+                                                <td>{{ dues.due_date }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Gecikme Zammı:</th>
+                                                <td>{{ dues.late_fee_percentage }}%</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Açıklama:</th>
+                                                <td>{{ dues.description|default:"-" }}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h5>Daire Aidatları</h5>
+                    <div class="table-responsive">
+                        <table class="table table-centered table-nowrap table-hover mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Daire No</th>
+                                    <th>Daire Sahibi</th>
+                                    <th>Tutar</th>
+                                    <th>Durum</th>
+                                    <th>Son Ödeme Tarihi</th>
+                                    <th>Ödeme Tarihi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for apt_dues in apartment_dues %}
+                                <tr>
+                                    <td>{{ apt_dues.apartment.number }}</td>
+                                    <td>{{ apt_dues.apartment.owner.get_full_name|default:"-" }}</td>
+                                    <td>{{ apt_dues.amount }}₺</td>
+                                    <td>
+                                        {% if apt_dues.status == 'paid' %}
+                                        <span class="badge bg-success">Ödendi</span>
+                                        {% elif apt_dues.status == 'pending' %}
+                                        <span class="badge bg-warning">Beklemede</span>
+                                        {% else %}
+                                        <span class="badge bg-danger">Ödenmedi</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ apt_dues.due_date }}</td>
+                                    <td>{{ apt_dues.payment_date|default:"-" }}</td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="6" class="text-center">Henüz daire aidatı bulunmamaktadır.</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

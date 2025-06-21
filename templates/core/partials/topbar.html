@@ -1,0 +1,132 @@
+{% load static %}
+<!-- Topbar Start -->
+<header class="app-topbar" id="header">
+    <div class="page-container topbar-menu">
+        <div class="d-flex align-items-center gap-2">
+
+            <!-- Brand Logo -->
+            <a href="{% url 'home' %}" class="logo">
+                <span class="logo-light">
+                    <span class="logo-lg"><img src="{% static 'images/logo.png' %}" alt="logo"></span>
+                    <span class="logo-sm"><img src="{% static 'images/logo-sm.png' %}" alt="small logo"></span>
+                </span>
+
+                <span class="logo-dark">
+                    <span class="logo-lg"><img src="{% static 'images/logo-dark.png' %}" alt="dark logo"></span>
+                    <span class="logo-sm"><img src="{% static 'images/logo-sm.png' %}" alt="small logo"></span>
+                </span>
+            </a>
+
+            <!-- Sidebar Menu Toggle Button -->
+            <button class="sidenav-toggle-button">
+                <i class="ri-menu-line"></i>
+            </button>
+
+            <!-- Topbar Page Title -->
+            <div class="topbar-item d-none d-md-flex px-2">
+                <h4 class="mb-0 fs-16">{% block page_title %}Apartman Yönetim Sistemi{% endblock %}</h4>
+            </div>
+
+        </div>
+
+        <div class="d-flex align-items-center gap-2">
+            <!-- Notification Dropdown -->
+            {% if user.is_authenticated %}
+            <div class="topbar-item">
+                <div class="dropdown noti-dropdown">
+                    <a class="dropdown-toggle arrow-none" href="#" role="button" data-bs-toggle="dropdown"
+                        aria-haspopup="false" aria-expanded="false">
+                        <i class="ri-notification-3-line fs-22"></i>
+                        <span class="noti-icon-badge"></span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-end dropdown-menu-animated dropdown-lg py-0">
+                        <div class="p-2 border-top-0 border-start-0 border-end-0 border-dashed border">
+                            <div class="row align-items-center">
+                                <div class="col">
+                                    <h6 class="m-0 fs-16 fw-semibold"> Bildirimler</h6>
+                                </div>
+                                <div class="col-auto">
+                                    <a href="javascript: void(0);" class="text-dark text-decoration-underline">
+                                        <small>Tümünü Temizle</small>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div data-simplebar class="max-h-xs-300">
+                            <!-- Notifications go here -->
+
+                        </div>
+
+                        <!-- All notifications link -->
+                        <a href="javascript:void(0);"
+                            class="dropdown-item text-center text-primary notify-item border-top py-2">
+                            Tümünü Gör
+                        </a>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- Light/Dark Mode Button -->
+            <div class="topbar-item d-none d-sm-flex">
+                <div>
+                    <button class="btn btn-soft-secondary" id="light-dark-mode">
+                        <i class="ri-moon-line fs-22"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- User Dropdown -->
+            <div class="topbar-item nav-user">
+                <div class="dropdown">
+                    <a class="dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true"
+                        aria-expanded="false">
+                        <div class="d-flex align-items-center">
+                            <div class="d-none d-md-flex flex-column text-end me-2">
+                                <span class="fs-14 text-dark">{{ user.get_full_name }}</span>
+                                <span class="fs-12 text-muted">{{ user.get_role_display }}</span>
+                            </div>
+                            <div class="flex-shrink-0">
+                                {% if user.profile_picture %}
+                                <img src="{{ user.profile_picture.url }}" alt="user-image"
+                                    class="rounded-circle avatar-xs">
+                                {% else %}
+                                <img src="{% static 'images/users/avatar-1.jpg' %}" alt="user-image"
+                                    class="rounded-circle avatar-xs">
+                                {% endif %}
+                            </div>
+                        </div>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-end dropdown-menu-animated profile-dropdown">
+                        <!-- item-->
+                        <div class="dropdown-header">
+                            <h6 class="text-overflow m-0">Hoş Geldiniz!</h6>
+                        </div>
+
+                        <!-- item-->
+                        <a href="{% url 'profile' %}" class="dropdown-item">
+                            <i class="ri-user-line fs-18 align-middle me-1"></i>
+                            <span>Profilim</span>
+                        </a>
+
+                        <!-- item-->
+                        <a href="{% url 'logout' %}" class="dropdown-item">
+                            <i class="ri-logout-box-line fs-18 align-middle me-1"></i>
+                            <span>Çıkış</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            <div class="topbar-item">
+                <a href="{% url 'login' %}" class="btn btn-primary">Giriş</a>
+            </div>
+            <div class="topbar-item">
+                <a href="{% url 'register' %}" class="btn btn-soft-primary">Kayıt Ol</a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</header>
+<!-- Topbar End -->

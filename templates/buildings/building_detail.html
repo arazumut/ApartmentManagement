@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ building.name }} Detayları{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box">
+                <div class="page-title-right">
+                    <ol class="breadcrumb m-0">
+                        <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Dashboard</a></li>
+                        <li class="breadcrumb-item"><a href="{% url 'building_list' %}">Binalar</a></li>
+                        <li class="breadcrumb-item active">{{ building.name }}</li>
+                    </ol>
+                </div>
+                <h4 class="page-title">{{ building.name }} Detayları</h4>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xl-4 col-lg-5">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="header-title mb-3">Bina Bilgileri</h4>
+                    
+                    <div class="d-flex mb-3">
+                        <div class="flex-shrink-0">
+                            <i class="ri-building-2-line text-muted font-24"></i>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <h5 class="mt-0">{{ building.name }}</h5>
+                            <p class="text-muted mb-1">{{ building.address }}</p>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <h5 class="font-14">Fiziksel Bilgiler</h5>
+                        <div class="row">
+                            <div class="col-4 text-center">
+                                <div class="mt-3">
+                                    <h4>{{ building.block_count }}</h4>
+                                    <p class="mb-0 text-muted text-truncate">Blok</p>
+                                </div>
+                            </div>
+                            <div class="col-4 text-center">
+                                <div class="mt-3">
+                                    <h4>{{ building.floors_per_block }}</h4>
+                                    <p class="mb-0 text-muted text-truncate">Kat/Blok</p>
+                                </div>
+                            </div>
+                            <div class="col-4 text-center">
+                                <div class="mt-3">
+                                    <h4>{{ building.apartments_per_floor }}</h4>
+                                    <p class="mb-0 text-muted text-truncate">Daire/Kat</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-grid">
+                        <a href="#" class="btn btn-primary">Düzenle</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-8 col-lg-7">
+            <div class="card">
+                <div class="card-body">
+                    <ul class="nav nav-tabs nav-bordered mb-3">
+                        <li class="nav-item">
+                            <a href="#apartments-tab" data-bs-toggle="tab" aria-expanded="true" class="nav-link active">
+                                <i class="mdi mdi-home-outline d-md-none d-block"></i>
+                                <span class="d-none d-md-block">Daireler</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#residents-tab" data-bs-toggle="tab" aria-expanded="false" class="nav-link">
+                                <i class="mdi mdi-account-outline d-md-none d-block"></i>
+                                <span class="d-none d-md-block">Sakinler</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#dues-tab" data-bs-toggle="tab" aria-expanded="false" class="nav-link">
+                                <i class="mdi mdi-currency-usd d-md-none d-block"></i>
+                                <span class="d-none d-md-block">Aidatlar</span>
+                            </a>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content">
+                        <div class="tab-pane show active" id="apartments-tab">
+                            <p class="text-muted">Bina için henüz daire bilgisi bulunmuyor.</p>
+                        </div>
+                        <div class="tab-pane" id="residents-tab">
+                            <p class="text-muted">Bina için henüz sakin bilgisi bulunmuyor.</p>
+                        </div>
+                        <div class="tab-pane" id="dues-tab">
+                            <p class="text-muted">Bina için henüz aidat bilgisi bulunmuyor.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
