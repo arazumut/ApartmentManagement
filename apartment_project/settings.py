@@ -38,6 +38,10 @@ ALLOWED_HOSTS = env.list('ALLOWED_HOSTS')
 # Application definition
 
 INSTALLED_APPS = [
+    # Unfold admin theme
+    'unfold',
+    'unfold.contrib.filters',  # Optional for custom filters
+    'unfold.contrib.forms',    # Optional for custom forms
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -185,4 +189,42 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
     ],
+}
+
+# Unfold Admin Theme Settings
+UNFOLD = {
+    "SITE_TITLE": "Apartment Management",
+    "SITE_HEADER": "Apartment Management",
+    "SITE_URL": "/",
+    "SITE_ICON": "",  # Boş bırakırsanız varsayılan ikon kullanılır
+    "TABS": False,  # Sekmeli gezinme için True yapabilirsiniz
+    "STYLES": [
+        "unfold/styles.css",
+    ],
+    "SCRIPTS": [
+        "unfold/scripts.js",
+    ],
+    "COLORS": {
+        "primary": {
+            "50": "250 245 255",
+            "100": "243 232 255",
+            "200": "233 213 255",
+            "300": "216 180 254",
+            "400": "192 132 252",
+            "500": "168 85 247",
+            "600": "147 51 234",
+            "700": "126 34 206",
+            "800": "107 33 168",
+            "900": "88 28 135",
+            "950": "59 7 100",
+        },
+    },
+    "EXTENSIONS": {
+        "modeltranslation": False,
+    },
+    # Basitleştirilmiş kenar çubuğu yapılandırması
+    "SIDEBAR": {
+        "show_search": True,
+        "show_all_applications": True,
+    },
 }
