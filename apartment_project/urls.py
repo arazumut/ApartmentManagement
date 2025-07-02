@@ -46,6 +46,7 @@ urlpatterns = [
     path('complaints/', include('complaints.urls')),  # Include complaints app URLs
     path('', include('caretaker.urls')),  # Include caretaker app URLs without prefix
     path('', include('packages.urls')),  # Include packages app URLs without prefix
+    path('notifications/', include('notifications.urls')),  # Include notifications app URLs
 ]
 
 # Serve media files in development

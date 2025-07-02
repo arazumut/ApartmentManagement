@@ -64,6 +64,7 @@ INSTALLED_APPS = [
     'announcements',
     'caretaker',
     'packages',
+    'notifications',
 ]
 
 MIDDLEWARE = [
