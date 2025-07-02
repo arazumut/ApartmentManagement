@@ -1,92 +1,188 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load crispy_forms_tags %}
 
 {% block title %}Profilim - Apartman Yönetim Sistemi{% endblock %}
 
-{% block page_title %}Profilim{% endblock %}
-
 {% block content %}
-<div class="row">
-    <div class="col-xl-4 col-lg-5">
-        <div class="card text-center">
-            <div class="card-body">
-                <div class="mb-3">
-                    {% if user.profile_picture %}
-                    <img src="{{ user.profile_picture.url }}" class="rounded-circle avatar-lg img-thumbnail" alt="profile-image">
-                    {% else %}
-                    <img src="{% static 'images/users/avatar-1.jpg' %}" class="rounded-circle avatar-lg img-thumbnail" alt="profile-image">
-                    {% endif %}
-                </div>
-
-                <h4 class="mb-0">{{ user.get_full_name }}</h4>
-                <p class="text-muted">{{ user.get_role_display }}</p>
-
-                <div class="text-start mt-3">
-                    <h4 class="fs-14 mb-3">İletişim Bilgileri</h4>
-                    <p class="text-muted mb-2"><strong>E-posta:</strong> <span class="ms-2">{{ user.email }}</span></p>
-                    <p class="text-muted mb-2"><strong>Telefon:</strong> <span class="ms-2">{{ user.phone_number|default:"Belirtilmemiş" }}</span></p>
-                </div>
+<div class="container-fluid">
+    <!-- Page title -->
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box">
+                <h4 class="page-title">Profilim</h4>
             </div>
         </div>
     </div>
 
-    <div class="col-xl-8 col-lg-7">
-        <div class="card">
-            <div class="card-header">
-                <h4 class="header-title">Profil Bilgilerim</h4>
-            </div>
-            <div class="card-body">
-                {% if messages %}
-                {% for message in messages %}
-                <div class="alert alert-success" role="alert">
-                    {{ message }}
-                </div>
-                {% endfor %}
-                {% endif %}
-
-                <form action="{% url 'profile' %}" method="POST" enctype="multipart/form-data">
-                    {% csrf_token %}
-                    
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="{{ form.first_name.id_for_label }}" class="form-label">Ad</label>
-                                {{ form.first_name }}
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="{{ form.last_name.id_for_label }}" class="form-label">Soyad</label>
-                                {{ form.last_name }}
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="{{ form.email.id_for_label }}" class="form-label">E-posta</label>
-                                {{ form.email }}
-                                <small class="text-muted">E-posta adresi değiştirilemez.</small>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="{{ form.phone_number.id_for_label }}" class="form-label">Telefon</label>
-                                {{ form.phone_number }}
-                            </div>
-                        </div>
+    <div class="row">
+        <!-- Profile Information -->
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-body">
+                    <div class="text-center mb-4">
+                        {% if user.profile_picture %}
+                        <img src="{{ user.profile_picture.url }}" alt="Profil Resmi" class="rounded-circle avatar-xl img-thumbnail">
+                        {% else %}
+                        <img src="{% static 'images/users/avatar-1.jpg' %}" alt="Profil Resmi" class="rounded-circle avatar-xl img-thumbnail">
+                        {% endif %}
+                        <h4 class="mt-3 mb-0">{{ user.get_full_name }}</h4>
+                        <p class="text-muted">
+                            {% if user.is_admin %}
+                            <span class="badge bg-primary">Yönetici</span>
+                            {% elif user.is_resident %}
+                            <span class="badge bg-info">Sakin</span>
+                            {% elif user.is_caretaker %}
+                            <span class="badge bg-success">Kapıcı</span>
+                            {% endif %}
+                        </p>
                     </div>
 
                     <div class="mb-3">
-                        <label for="{{ form.profile_picture.id_for_label }}" class="form-label">Profil Fotoğrafı</label>
-                        {{ form.profile_picture }}
+                        <h5 class="mb-3">İletişim Bilgileri</h5>
+                        <div class="d-flex align-items-start mb-2">
+                            <div class="flex-shrink-0">
+                                <i class="ri-mail-line text-muted fs-18 me-2"></i>
+                            </div>
+                            <div class="flex-grow-1">
+                                <p class="mb-0">{{ user.email }}</p>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-start mb-2">
+                            <div class="flex-shrink-0">
+                                <i class="ri-phone-line text-muted fs-18 me-2"></i>
+                            </div>
+                            <div class="flex-grow-1">
+                                <p class="mb-0">{{ user.phone_number|default:"Telefon numarası eklenmemiş" }}</p>
+                            </div>
+                        </div>
                     </div>
 
-                    <div class="text-end">
-                        <button type="submit" class="btn btn-success mt-2"><i class="mdi mdi-content-save"></i> Kaydet</button>
+                    {% if user.is_resident %}
+                    <div class="mb-3">
+                        <h5 class="mb-3">Dairelerim</h5>
+                        {% for apartment in user.apartments.all %}
+                        <div class="d-flex align-items-start mb-2">
+                            <div class="flex-shrink-0">
+                                <i class="ri-home-4-line text-muted fs-18 me-2"></i>
+                            </div>
+                            <div class="flex-grow-1">
+                                <p class="mb-0">{{ apartment }}</p>
+                                <p class="text-muted mb-0">
+                                    {% if apartment.resident_type == 'owner' %}
+                                    <span class="badge bg-success">Mülk Sahibi</span>
+                                    {% else %}
+                                    <span class="badge bg-info">Kiracı</span>
+                                    {% endif %}
+                                </p>
+                            </div>
+                        </div>
+                        {% empty %}
+                        <p class="text-muted">Henüz daire kaydınız bulunmuyor.</p>
+                        {% endfor %}
                     </div>
-                </form>
+                    {% endif %}
+
+                    {% if user.is_caretaker %}
+                    <div class="mb-3">
+                        <h5 class="mb-3">Sorumlu Olduğum Binalar</h5>
+                        {% for building in user.managed_buildings.all %}
+                        <div class="d-flex align-items-start mb-2">
+                            <div class="flex-shrink-0">
+                                <i class="ri-building-line text-muted fs-18 me-2"></i>
+                            </div>
+                            <div class="flex-grow-1">
+                                <p class="mb-0">{{ building.name }}</p>
+                                <p class="text-muted mb-0">{{ building.address|truncatechars:50 }}</p>
+                            </div>
+                        </div>
+                        {% empty %}
+                        <p class="text-muted">Henüz sorumlu olduğunuz bina bulunmuyor.</p>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Profile Edit Form -->
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title mb-4">Profil Bilgilerimi Düzenle</h4>
+
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                {{ form.first_name|as_crispy_field }}
+                            </div>
+                            <div class="col-md-6">
+                                {{ form.last_name|as_crispy_field }}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                {{ form.email|as_crispy_field }}
+                            </div>
+                            <div class="col-md-6">
+                                {{ form.phone_number|as_crispy_field }}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-12">
+                                {{ form.profile_picture|as_crispy_field }}
+                            </div>
+                        </div>
+
+                        <div class="text-end">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="ri-save-line me-1"></i> Değişiklikleri Kaydet
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Password Change Form -->
+            <div class="card mt-4">
+                <div class="card-body">
+                    <h4 class="card-title mb-4">Şifre Değiştir</h4>
+
+                    <form method="post" action="{% url 'password_change' %}">
+                        {% csrf_token %}
+                        
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label for="id_old_password" class="form-label">Mevcut Şifre</label>
+                                    <input type="password" name="old_password" id="id_old_password" class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label for="id_new_password1" class="form-label">Yeni Şifre</label>
+                                    <input type="password" name="new_password1" id="id_new_password1" class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label for="id_new_password2" class="form-label">Yeni Şifre (Tekrar)</label>
+                                    <input type="password" name="new_password2" id="id_new_password2" class="form-control" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="text-end">
+                            <button type="submit" class="btn btn-warning">
+                                <i class="ri-lock-password-line me-1"></i> Şifremi Değiştir
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>

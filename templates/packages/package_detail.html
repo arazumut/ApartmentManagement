@@ -1,0 +1,146 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Paket Detayı - Apartman Yönetim Sistemi{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Page title -->
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box">
+                <div class="page-title-right">
+                    {% if user.is_admin or user.is_caretaker %}
+                    <a href="{% url 'package_list' %}" class="btn btn-secondary me-1">
+                        <i class="ri-arrow-left-line me-1"></i> Listeye Dön
+                    </a>
+                    <a href="{% url 'package_update' package.id %}" class="btn btn-primary me-1">
+                        <i class="ri-edit-line me-1"></i> Düzenle
+                    </a>
+                    {% if package.status == 'pending' %}
+                    <a href="{% url 'package_deliver' package.id %}" class="btn btn-success">
+                        <i class="ri-check-line me-1"></i> Teslim Et
+                    </a>
+                    {% endif %}
+                    {% else %}
+                    <a href="{% url 'resident_package_list' %}" class="btn btn-secondary">
+                        <i class="ri-arrow-left-line me-1"></i> Listeye Dön
+                    </a>
+                    {% endif %}
+                </div>
+                <h4 class="page-title">Paket Detayı</h4>
+            </div>
+        </div>
+    </div>
+
+    <!-- Package details -->
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">Paket Bilgileri</h5>
+                    
+                    <div class="row mb-2">
+                        <div class="col-md-4">
+                            <p class="text-muted mb-1">Takip Numarası</p>
+                            <h5>{{ package.tracking_number|default:"-" }}</h5>
+                        </div>
+                        <div class="col-md-4">
+                            <p class="text-muted mb-1">Durum</p>
+                            <h5>
+                                {% if package.status == 'pending' %}
+                                <span class="badge bg-warning">Bekliyor</span>
+                                {% else %}
+                                <span class="badge bg-success">Teslim Edildi</span>
+                                {% endif %}
+                            </h5>
+                        </div>
+                        <div class="col-md-4">
+                            <p class="text-muted mb-1">Alınma Tarihi</p>
+                            <h5>{{ package.received_at|date:"d.m.Y H:i" }}</h5>
+                        </div>
+                    </div>
+
+                    <div class="row mb-2">
+                        <div class="col-md-4">
+                            <p class="text-muted mb-1">Bina</p>
+                            <h5>{{ package.building.name }}</h5>
+                        </div>
+                        <div class="col-md-4">
+                            <p class="text-muted mb-1">Daire</p>
+                            <h5>{{ package.apartment }}</h5>
+                        </div>
+                        <div class="col-md-4">
+                            <p class="text-muted mb-1">Gönderen</p>
+                            <h5>{{ package.sender|default:"-" }}</h5>
+                        </div>
+                    </div>
+
+                    <div class="row mb-2">
+                        <div class="col-12">
+                            <p class="text-muted mb-1">Açıklama</p>
+                            <p>{{ package.description|default:"Açıklama bulunmuyor."|linebreaks }}</p>
+                        </div>
+                    </div>
+
+                    {% if package.status == 'delivered' %}
+                    <hr>
+                    <h5 class="card-title mb-3">Teslimat Bilgileri</h5>
+                    
+                    <div class="row mb-2">
+                        <div class="col-md-6">
+                            <p class="text-muted mb-1">Teslim Alan</p>
+                            <h5>{{ package.delivered_to.get_full_name }}</h5>
+                        </div>
+                        <div class="col-md-6">
+                            <p class="text-muted mb-1">Teslim Tarihi</p>
+                            <h5>{{ package.delivered_at|date:"d.m.Y H:i" }}</h5>
+                        </div>
+                    </div>
+
+                    {% if package.notes %}
+                    <div class="row mb-2">
+                        <div class="col-12">
+                            <p class="text-muted mb-1">Notlar</p>
+                            <p>{{ package.notes|linebreaks }}</p>
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">Paket Görseli</h5>
+                    
+                    {% if package.image %}
+                    <div class="text-center">
+                        <img src="{{ package.image.url }}" alt="Paket Görseli" class="img-fluid rounded">
+                    </div>
+                    {% else %}
+                    <div class="text-center py-5">
+                        <img src="{% static 'images/package-placeholder.svg' %}" alt="Görsel yok" height="120">
+                        <p class="text-muted mt-2">Paket görseli bulunmuyor</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            {% if package.status == 'delivered' and package.delivery_signature %}
+            <div class="card mt-3">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">Teslim İmzası</h5>
+                    
+                    <div class="text-center">
+                        <img src="{{ package.delivery_signature.url }}" alt="Teslim İmzası" class="img-fluid rounded">
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %} 

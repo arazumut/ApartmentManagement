@@ -1,9 +1,13 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import CreateView, DetailView, UpdateView, DeleteView, ListView
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .models import Building
+from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
+from django.contrib import messages
+from .models import Building, Apartment
 from users.models import User
+from .forms import BuildingForm, ApartmentForm
 
 # Create your views here.
 
@@ -23,3 +27,22 @@ class BuildingDetailView(LoginRequiredMixin, DetailView):
     model = Building
     template_name = 'buildings/building_detail.html'
     context_object_name = 'building'
+
+@login_required
+def get_apartments_by_building(request, building_id):
+    """API endpoint to get apartments for a specific building"""
+    building = get_object_or_404(Building, id=building_id)
+    apartments = Apartment.objects.filter(building=building)
+    
+    # Serialize apartments to JSON
+    data = []
+    for apartment in apartments:
+        data.append({
+            'id': apartment.id,
+            'number': str(apartment),
+            'floor': apartment.floor,
+            'block': apartment.block or '',
+            'is_occupied': apartment.is_occupied
+        })
+    
+    return JsonResponse(data, safe=False)

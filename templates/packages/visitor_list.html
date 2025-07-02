@@ -1,0 +1,147 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Ziyaretçiler - Apartman Yönetim Sistemi{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Page title -->
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box">
+                <div class="page-title-right">
+                    <a href="{% url 'visitor_create' %}" class="btn btn-primary">
+                        <i class="ri-add-line me-1"></i> Yeni Ziyaretçi Ekle
+                    </a>
+                </div>
+                <h4 class="page-title">Ziyaretçi Yönetimi</h4>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="row mb-3">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">Filtreler</h5>
+                    <form method="get" class="row g-3">
+                        <div class="col-md-4">
+                            <label for="building" class="form-label">Bina</label>
+                            <select name="building" id="building" class="form-select">
+                                <option value="">Tüm Binalar</option>
+                                {% for building in buildings %}
+                                <option value="{{ building.id }}" {% if request.GET.building == building.id|stringformat:"i" %}selected{% endif %}>
+                                    {{ building.name }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="start_date" class="form-label">Başlangıç Tarihi</label>
+                            <input type="date" name="start_date" id="start_date" class="form-control" value="{{ request.GET.start_date }}">
+                        </div>
+                        <div class="col-md-4">
+                            <label for="end_date" class="form-label">Bitiş Tarihi</label>
+                            <input type="date" name="end_date" id="end_date" class="form-control" value="{{ request.GET.end_date }}">
+                        </div>
+                        <div class="col-12 d-flex justify-content-end">
+                            <button type="submit" class="btn btn-primary me-2">Filtrele</button>
+                            <a href="{% url 'visitor_list' %}" class="btn btn-secondary">Sıfırla</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Visitors list -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">Ziyaretçi Listesi</h5>
+                    
+                    {% if visitors %}
+                    <div class="table-responsive">
+                        <table class="table table-centered table-hover mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Ad Soyad</th>
+                                    <th>Bina</th>
+                                    <th>Daire</th>
+                                    <th>Ziyaret Amacı</th>
+                                    <th>Giriş Zamanı</th>
+                                    <th>Çıkış Zamanı</th>
+                                    <th>Durum</th>
+                                    <th>İşlemler</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for visitor in visitors %}
+                                <tr>
+                                    <td>{{ visitor.name }}</td>
+                                    <td>{{ visitor.building.name }}</td>
+                                    <td>{{ visitor.apartment }}</td>
+                                    <td>{{ visitor.purpose }}</td>
+                                    <td>{{ visitor.arrival_time|date:"d.m.Y H:i" }}</td>
+                                    <td>
+                                        {% if visitor.departure_time %}
+                                        {{ visitor.departure_time|date:"d.m.Y H:i" }}
+                                        {% else %}
+                                        <span class="text-muted">-</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if visitor.departure_time %}
+                                        <span class="badge bg-success">Çıkış Yapıldı</span>
+                                        {% else %}
+                                        <span class="badge bg-warning">Ziyaret Devam Ediyor</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <a href="{% url 'visitor_update' visitor.id %}" class="btn btn-sm btn-primary">
+                                            <i class="ri-edit-line"></i>
+                                        </a>
+                                        {% if not visitor.departure_time %}
+                                        <a href="{% url 'visitor_checkout' visitor.id %}" class="btn btn-sm btn-success">
+                                            <i class="ri-logout-box-line"></i> Çıkış
+                                        </a>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="text-center py-5">
+                        <img src="{% static 'images/visitor-placeholder.svg' %}" alt="Ziyaretçi yok" height="120" class="mb-4">
+                        <h5>Henüz ziyaretçi kaydı bulunmuyor</h5>
+                        <p class="text-muted">Yeni ziyaretçi kaydı oluşturmak için "Yeni Ziyaretçi Ekle" butonuna tıklayın.</p>
+                        <a href="{% url 'visitor_create' %}" class="btn btn-primary mt-2">
+                            <i class="ri-add-line me-1"></i> Yeni Ziyaretçi Ekle
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Auto-submit form when building changes
+    document.addEventListener('DOMContentLoaded', function() {
+        const buildingSelect = document.getElementById('building');
+        
+        if (buildingSelect) {
+            buildingSelect.addEventListener('change', function() {
+                document.querySelector('form').submit();
+            });
+        }
+    });
+</script>
+{% endblock %} 

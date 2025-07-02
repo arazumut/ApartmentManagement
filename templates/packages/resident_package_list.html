@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Paketlerim - Apartman Yönetim Sistemi{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Page title -->
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box">
+                <h4 class="page-title">Paketlerim</h4>
+            </div>
+        </div>
+    </div>
+
+    <!-- Packages list -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">Paket Listesi</h5>
+                    
+                    {% if packages %}
+                    <div class="table-responsive">
+                        <table class="table table-centered table-hover mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Takip No</th>
+                                    <th>Daire</th>
+                                    <th>Gönderen</th>
+                                    <th>Alınma Tarihi</th>
+                                    <th>Durum</th>
+                                    <th>Detay</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for package in packages %}
+                                <tr>
+                                    <td>{{ package.tracking_number|default:"-" }}</td>
+                                    <td>{{ package.apartment }}</td>
+                                    <td>{{ package.sender|default:"-" }}</td>
+                                    <td>{{ package.received_at|date:"d.m.Y H:i" }}</td>
+                                    <td>
+                                        {% if package.status == 'pending' %}
+                                        <span class="badge bg-warning">Bekliyor</span>
+                                        {% else %}
+                                        <span class="badge bg-success">Teslim Edildi</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <a href="{% url 'package_detail' package.id %}" class="btn btn-sm btn-info">
+                                            <i class="ri-eye-line"></i> Detay
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="text-center py-5">
+                        <img src="{% static 'images/empty-box.svg' %}" alt="Paket yok" height="120" class="mb-4">
+                        <h5>Henüz paket kaydınız bulunmuyor</h5>
+                        <p class="text-muted">Size gelen paketler burada listelenecektir.</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delivered packages -->
+    {% if delivered_packages %}
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">Teslim Alınan Paketler</h5>
+                    
+                    <div class="table-responsive">
+                        <table class="table table-centered table-hover mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Takip No</th>
+                                    <th>Daire</th>
+                                    <th>Gönderen</th>
+                                    <th>Alınma Tarihi</th>
+                                    <th>Teslim Tarihi</th>
+                                    <th>Detay</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for package in delivered_packages %}
+                                <tr>
+                                    <td>{{ package.tracking_number|default:"-" }}</td>
+                                    <td>{{ package.apartment }}</td>
+                                    <td>{{ package.sender|default:"-" }}</td>
+                                    <td>{{ package.received_at|date:"d.m.Y H:i" }}</td>
+                                    <td>{{ package.delivered_at|date:"d.m.Y H:i" }}</td>
+                                    <td>
+                                        <a href="{% url 'package_detail' package.id %}" class="btn btn-sm btn-info">
+                                            <i class="ri-eye-line"></i> Detay
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %} 

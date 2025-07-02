@@ -1,20 +1,18 @@
 from django.urls import path
-from .views import (
-    PackageListView, PackageDetailView, PackageCreateView, PackageUpdateView,
-    ResidentPackageListView, VisitorListView, VisitorCreateView, VisitorUpdateView
-)
+from . import views
 
 urlpatterns = [
-    # Admin/Caretaker routes
-    path('', PackageListView.as_view(), name='package_list'),
-    path('<int:pk>/', PackageDetailView.as_view(), name='package_detail'),
-    path('create/', PackageCreateView.as_view(), name='package_create'),
-    path('<int:pk>/update/', PackageUpdateView.as_view(), name='package_update'),
+    # Package management URLs
+    path('packages/', views.package_list, name='package_list'),
+    path('packages/resident/', views.resident_package_list, name='resident_package_list'),
+    path('packages/create/', views.package_create, name='package_create'),
+    path('packages/<int:pk>/', views.package_detail, name='package_detail'),
+    path('packages/<int:pk>/update/', views.package_update, name='package_update'),
+    path('packages/<int:pk>/deliver/', views.package_deliver, name='package_deliver'),
     
-    path('visitors/', VisitorListView.as_view(), name='visitor_list'),
-    path('visitors/create/', VisitorCreateView.as_view(), name='visitor_create'),
-    path('visitors/<int:pk>/update/', VisitorUpdateView.as_view(), name='visitor_update'),
-    
-    # Resident routes
-    path('my-packages/', ResidentPackageListView.as_view(), name='resident_package_list'),
+    # Visitor management URLs
+    path('visitors/', views.visitor_list, name='visitor_list'),
+    path('visitors/create/', views.visitor_create, name='visitor_create'),
+    path('visitors/<int:pk>/update/', views.visitor_update, name='visitor_update'),
+    path('visitors/<int:pk>/checkout/', views.visitor_checkout, name='visitor_checkout'),
 ]
