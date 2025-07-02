@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Bildirimlerim - Apartman Yönetim Sistemi{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Page title -->
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box">
+                <div class="page-title-right">
+                    <a href="{% url 'mark_all_notifications_read' %}" class="btn btn-primary">
+                        <i class="ri-check-double-line me-1"></i> Tümünü Okundu İşaretle
+                    </a>
+                </div>
+                <h4 class="page-title">Bildirimlerim</h4>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    {% if notifications %}
+                    <div class="notification-list">
+                        {% for notification in notifications %}
+                        <div class="d-flex align-items-start p-3 {% if not notification.is_read %}bg-light{% endif %} border-bottom">
+                            <div class="flex-shrink-0 me-3">
+                                {% if notification.notification_type == 'info' %}
+                                <div class="avatar-sm">
+                                    <span class="avatar-title bg-soft-info rounded-circle">
+                                        <i class="ri-information-line fs-20 text-info"></i>
+                                    </span>
+                                </div>
+                                {% elif notification.notification_type == 'success' %}
+                                <div class="avatar-sm">
+                                    <span class="avatar-title bg-soft-success rounded-circle">
+                                        <i class="ri-check-line fs-20 text-success"></i>
+                                    </span>
+                                </div>
+                                {% elif notification.notification_type == 'warning' %}
+                                <div class="avatar-sm">
+                                    <span class="avatar-title bg-soft-warning rounded-circle">
+                                        <i class="ri-alert-line fs-20 text-warning"></i>
+                                    </span>
+                                </div>
+                                {% elif notification.notification_type == 'error' %}
+                                <div class="avatar-sm">
+                                    <span class="avatar-title bg-soft-danger rounded-circle">
+                                        <i class="ri-error-warning-line fs-20 text-danger"></i>
+                                    </span>
+                                </div>
+                                {% endif %}
+                            </div>
+                            <div class="flex-grow-1">
+                                <h5 class="mt-0 mb-1">
+                                    {{ notification.title }}
+                                    {% if not notification.is_read %}
+                                    <span class="badge bg-info ms-1">Yeni</span>
+                                    {% endif %}
+                                </h5>
+                                <p class="text-muted mb-2">{{ notification.message }}</p>
+                                <div class="d-flex justify-content-between">
+                                    <small class="text-muted">{{ notification.created_at|date:"d.m.Y H:i" }}</small>
+                                    <div>
+                                        <a href="{% url 'mark_notification_read' notification.id %}" class="btn btn-sm btn-light">
+                                            {% if notification.link %}
+                                            <i class="ri-external-link-line me-1"></i> Görüntüle
+                                            {% else %}
+                                            <i class="ri-check-line me-1"></i> Okundu İşaretle
+                                            {% endif %}
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <div class="text-center py-5">
+                        <img src="{% static 'images/notification-empty.svg' %}" alt="Bildirim yok" height="120" class="mb-4">
+                        <h5>Henüz bildiriminiz bulunmuyor</h5>
+                        <p class="text-muted">Yeni bildirimler geldiğinde burada listelenecektir.</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 
