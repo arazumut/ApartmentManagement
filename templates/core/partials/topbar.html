@@ -37,33 +37,36 @@
                     <a class="dropdown-toggle arrow-none" href="#" role="button" data-bs-toggle="dropdown"
                         aria-haspopup="false" aria-expanded="false">
                         <i class="ri-notification-3-line fs-22"></i>
-                        <span class="noti-icon-badge"></span>
+                        <span class="noti-icon-badge" id="notification-badge"></span>
                     </a>
                     <div class="dropdown-menu dropdown-menu-end dropdown-menu-animated dropdown-lg py-0">
                         <div class="p-2 border-top-0 border-start-0 border-end-0 border-dashed border">
                             <div class="row align-items-center">
                                 <div class="col">
-                                    <h6 class="m-0 fs-16 fw-semibold"> Bildirimler</h6>
+                                    <h6 class="m-0 fs-16 fw-semibold">Bildirimler</h6>
                                 </div>
                                 <div class="col-auto">
-                                    <a href="javascript: void(0);" class="text-dark text-decoration-underline">
-                                        <small>Tümünü Temizle</small>
+                                    <a href="{% url 'mark_all_notifications_read' %}" class="text-dark text-decoration-underline">
+                                        <small>Tümünü Okundu İşaretle</small>
                                     </a>
                                 </div>
                             </div>
                         </div>
 
-                        <div data-simplebar class="max-h-xs-300">
-                            <!-- Notifications go here -->
-
+                        <div data-simplebar class="max-h-xs-300" id="notification-list">
+                            <!-- Notifications will be loaded via AJAX -->
+                            <div class="text-center p-3">
+                                <div class="spinner-border text-primary" role="status">
+                                    <span class="visually-hidden">Yükleniyor...</span>
+                                </div>
+                            </div>
                         </div>
 
                         <!-- All notifications link -->
-                        <a href="javascript:void(0);"
+                        <a href="{% url 'notification_list' %}"
                             class="dropdown-item text-center text-primary notify-item border-top py-2">
                             Tümünü Gör
                         </a>
-
                     </div>
                 </div>
             </div>
@@ -111,6 +114,12 @@
                         </a>
 
                         <!-- item-->
+                        <a href="{% url 'notification_list' %}" class="dropdown-item">
+                            <i class="ri-notification-3-line fs-18 align-middle me-1"></i>
+                            <span>Bildirimlerim</span>
+                        </a>
+
+                        <!-- item-->
                         <a href="{% url 'logout' %}" class="dropdown-item">
                             <i class="ri-logout-box-line fs-18 align-middle me-1"></i>
                             <span>Çıkış</span>
@@ -130,3 +139,97 @@
     </div>
 </header>
 <!-- Topbar End -->
+
+{% block extra_js %}
+{% if user.is_authenticated %}
+<script>
+    // Function to load notifications
+    function loadNotifications() {
+        fetch('{% url "api_recent_notifications" %}')
+            .then(response => response.json())
+            .then(data => {
+                const notificationList = document.getElementById('notification-list');
+                const notificationBadge = document.getElementById('notification-badge');
+                
+                // Count unread notifications
+                const unreadCount = data.notifications.filter(n => !n.is_read).length;
+                
+                // Update badge
+                if (unreadCount > 0) {
+                    notificationBadge.style.display = 'block';
+                    notificationBadge.textContent = unreadCount > 9 ? '9+' : unreadCount;
+                } else {
+                    notificationBadge.style.display = 'none';
+                }
+                
+                // Clear loading indicator
+                notificationList.innerHTML = '';
+                
+                // Add notifications or empty message
+                if (data.notifications.length === 0) {
+                    notificationList.innerHTML = `
+                        <div class="text-center p-3">
+                            <p class="text-muted mb-0">Bildiriminiz bulunmuyor</p>
+                        </div>
+                    `;
+                } else {
+                    data.notifications.forEach(notification => {
+                        let iconClass = 'ri-information-line';
+                        let bgClass = 'bg-info';
+                        
+                        if (notification.type === 'success') {
+                            iconClass = 'ri-check-line';
+                            bgClass = 'bg-success';
+                        } else if (notification.type === 'warning') {
+                            iconClass = 'ri-alert-line';
+                            bgClass = 'bg-warning';
+                        } else if (notification.type === 'error') {
+                            iconClass = 'ri-error-warning-line';
+                            bgClass = 'bg-danger';
+                        }
+                        
+                        const readClass = notification.is_read ? '' : 'bg-light';
+                        const newBadge = notification.is_read ? '' : '<span class="badge bg-info ms-1">Yeni</span>';
+                        
+                        const notificationUrl = notification.link || `{% url 'mark_notification_read' 0 %}`.replace('0', notification.id);
+                        
+                        notificationList.innerHTML += `
+                            <a href="${notificationUrl}" class="dropdown-item p-0 ${readClass}">
+                                <div class="d-flex align-items-start p-3">
+                                    <div class="flex-shrink-0 me-3">
+                                        <div class="avatar-sm">
+                                            <span class="avatar-title ${bgClass} rounded-circle">
+                                                <i class="${iconClass} text-white"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <h5 class="mt-0 mb-1 fs-14">
+                                            ${notification.title} ${newBadge}
+                                        </h5>
+                                        <p class="text-muted mb-0 fs-12">${notification.created_at}</p>
+                                    </div>
+                                </div>
+                            </a>
+                        `;
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error loading notifications:', error);
+                document.getElementById('notification-list').innerHTML = `
+                    <div class="text-center p-3">
+                        <p class="text-danger mb-0">Bildirimler yüklenirken hata oluştu</p>
+                    </div>
+                `;
+            });
+    }
+    
+    // Load notifications when page loads
+    document.addEventListener('DOMContentLoaded', loadNotifications);
+    
+    // Refresh notifications every 60 seconds
+    setInterval(loadNotifications, 60000);
+</script>
+{% endif %}
+{% endblock %}
