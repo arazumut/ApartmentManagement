@@ -25,6 +25,11 @@ class Building(models.Model):
         related_name='administered_buildings',
         limit_choices_to={'role': User.ADMIN}
     )
+    construction_year = models.PositiveIntegerField(_('construction year'), null=True, blank=True)
+    total_area_sqm = models.PositiveIntegerField(_('total area (m²)'), null=True, blank=True)
+    energy_efficiency_class = models.CharField(_('energy efficiency class'), max_length=5, blank=True, null=True)
+    common_areas = models.TextField(_('common areas'), blank=True, null=True, 
+                                   help_text=_('Description of common areas like garden, pool, gym, etc.'))
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

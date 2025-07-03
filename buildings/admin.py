@@ -26,7 +26,11 @@ class BuildingAdmin(ModelAdmin):
             'fields': ('name', 'address'),
         }),
         (_('Building Information'), {
-            'fields': ('block_count', 'floors_per_block', 'apartments_per_floor'),
+            'fields': ('block_count', 'floors_per_block', 'apartments_per_floor', 'construction_year', 'total_area_sqm'),
+        }),
+        (_('Additional Information'), {
+            'fields': ('energy_efficiency_class', 'common_areas'),
+            'classes': ('collapse',),
         }),
         (_('Management'), {
             'fields': ('caretaker', 'admin'),
