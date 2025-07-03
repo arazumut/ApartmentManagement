@@ -15,16 +15,40 @@
     </a>
 
     <!-- Sidebar Hover Menu Toggle Button -->
-    <button class="button-sm-hover">
+    <button class="button-sm-hover" id="collapse-menu-btn">
         <i class="ri-circle-line align-middle"></i>
     </button>
 
     <!-- Full Sidebar Menu Close Button -->
-    <button class="button-close-fullsidebar">
-        <i class="ti ti-x align-middle"></i>
+    <button class="button-close-fullsidebar" id="close-sidebar-btn">
+        <i class="ri-close-line align-middle"></i>
     </button>
 
-    <div data-simplebar>
+    <!-- User Profile Summary (Mobile Only) -->
+    <div class="d-block d-lg-none p-3 border-bottom sidebar-user">
+        {% if user.is_authenticated %}
+            <div class="d-flex align-items-center">
+                <div class="flex-shrink-0">
+                    {% if user.profile_picture %}
+                        <img src="{{ user.profile_picture.url }}" alt="user-image" class="rounded-circle avatar-md">
+                    {% else %}
+                        <img src="{% static 'images/users/avatar-1.jpg' %}" alt="user-image" class="rounded-circle avatar-md">
+                    {% endif %}
+                </div>
+                <div class="flex-grow-1 ms-3">
+                    <h6 class="mb-1">{{ user.get_full_name }}</h6>
+                    <p class="text-muted mb-0">{{ user.get_role_display }}</p>
+                </div>
+            </div>
+        {% else %}
+            <div class="text-center py-2">
+                <a href="{% url 'login' %}" class="btn btn-sm btn-soft-primary me-2">Giriş Yap</a>
+                <a href="{% url 'register' %}" class="btn btn-sm btn-primary">Kayıt Ol</a>
+            </div>
+        {% endif %}
+    </div>
+
+    <div data-simplebar class="sidebar-content">
         <!--- Sidenav Menu -->
         <ul class="side-nav">
             <li class="side-nav-title">
@@ -40,32 +64,52 @@
 
             {% if user.is_authenticated %}
                 {% if user.is_admin %}
+                    <!-- Admin Menüsü -->
+                    <li class="side-nav-title">Yönetim</li>
+                    
                     <li class="side-nav-item">
-                        <a href="{% url 'building_list' %}" class="side-nav-link">
+                        <a data-bs-toggle="collapse" href="#buildingMenu" aria-expanded="false" aria-controls="buildingMenu" class="side-nav-link">
                             <i class="ri-building-line"></i>
-                            <span> Binalar </span>
+                            <span> Bina Yönetimi </span>
+                            <span class="menu-arrow"></span>
                         </a>
+                        <div class="collapse" id="buildingMenu">
+                            <ul class="side-nav-second-level">
+                                <li>
+                                    <a href="{% url 'building_list' %}">Tüm Binalar</a>
+                                </li>
+                                <li>
+                                    <a href="{% url 'building_create' %}">Yeni Bina Ekle</a>
+                                </li>
+                                <li>
+                                    <a href="{% url 'apartment_list' %}">Daireler</a>
+                                </li>
+                            </ul>
+                        </div>
                     </li>
 
                     <li class="side-nav-item">
-                        <a href="{% url 'apartment_list' %}" class="side-nav-link">
-                            <i class="ri-home-4-line"></i>
-                            <span> Daireler </span>
-                        </a>
-                    </li>
-
-                    <li class="side-nav-item">
-                        <a href="{% url 'dues_list' %}" class="side-nav-link">
+                        <a data-bs-toggle="collapse" href="#financeMenu" aria-expanded="false" aria-controls="financeMenu" class="side-nav-link">
                             <i class="ri-money-dollar-box-line"></i>
-                            <span> Aidatlar </span>
+                            <span> Finans </span>
+                            <span class="menu-arrow"></span>
                         </a>
-                    </li>
-
-                    <li class="side-nav-item">
-                        <a href="{% url 'expense_list' %}" class="side-nav-link">
-                            <i class="ri-exchange-dollar-line"></i>
-                            <span> Giderler </span>
-                        </a>
+                        <div class="collapse" id="financeMenu">
+                            <ul class="side-nav-second-level">
+                                <li>
+                                    <a href="{% url 'dues_list' %}">Aidatlar</a>
+                                </li>
+                                <li>
+                                    <a href="{% url 'dues_create' %}">Yeni Aidat Ekle</a>
+                                </li>
+                                <li>
+                                    <a href="{% url 'expense_list' %}">Giderler</a>
+                                </li>
+                                <li>
+                                    <a href="{% url 'financial_reports' %}">Finansal Raporlar</a>
+                                </li>
+                            </ul>
+                        </div>
                     </li>
 
                     <li class="side-nav-item">
@@ -79,6 +123,7 @@
                         <a href="{% url 'complaint_list' %}" class="side-nav-link">
                             <i class="ri-feedback-line"></i>
                             <span> Şikayetler </span>
+                            <span class="badge bg-danger rounded-pill float-end" id="new-complaints-badge"></span>
                         </a>
                     </li>
 
@@ -88,96 +133,147 @@
                             <span> Görevler </span>
                         </a>
                     </li>
-                {% endif %}
-
-                {% if user.is_resident %}
-                    <li class="side-nav-item">
-                        <a href="{% url 'resident_apartment_list' %}" class="side-nav-link">
-                            <i class="ri-home-4-line"></i>
-                            <span> Dairelerim </span>
-                        </a>
-                    </li>
-
-                    <li class="side-nav-item">
-                        <a href="{% url 'resident_dues_list' %}" class="side-nav-link">
-                            <i class="ri-money-dollar-box-line"></i>
-                            <span> Aidatlarım </span>
-                        </a>
-                    </li>
-
-                    <li class="side-nav-item">
-                        <a href="{% url 'resident_announcement_list' %}" class="side-nav-link">
-                            <i class="ri-notification-2-line"></i>
-                            <span> Duyurular </span>
-                        </a>
-                    </li>
-
-                    <li class="side-nav-item">
-                        <a href="{% url 'resident_complaint_list' %}" class="side-nav-link">
-                            <i class="ri-feedback-line"></i>
-                            <span> Şikayetlerim </span>
-                        </a>
-                    </li>
-
-                    <li class="side-nav-item">
-                        <a href="{% url 'resident_package_list' %}" class="side-nav-link">
-                            <i class="ri-inbox-archive-line"></i>
-                            <span> Paketlerim </span>
-                        </a>
-                    </li>
-                {% endif %}
-
-                {% if user.is_caretaker %}
-                    <li class="side-nav-item">
-                        <a href="{% url 'caretaker_task_list' %}" class="side-nav-link">
-                            <i class="ri-task-line"></i>
-                            <span> Görevlerim </span>
-                        </a>
-                    </li>
-
-                    <li class="side-nav-item">
-                        <a href="{% url 'caretaker_complaint_list' %}" class="side-nav-link">
-                            <i class="ri-feedback-line"></i>
-                            <span> Şikayetler </span>
-                        </a>
-                    </li>
-
+                    
                     <li class="side-nav-item">
                         <a href="{% url 'package_list' %}" class="side-nav-link">
                             <i class="ri-inbox-archive-line"></i>
                             <span> Paketler </span>
                         </a>
                     </li>
-
+                    
+                    <li class="side-nav-title">Ayarlar</li>
+                    
                     <li class="side-nav-item">
-                        <a href="{% url 'visitor_list' %}" class="side-nav-link">
-                            <i class="ri-user-follow-line"></i>
-                            <span> Ziyaretçiler </span>
+                        <a href="{% url 'user_list' %}" class="side-nav-link">
+                            <i class="ri-user-settings-line"></i>
+                            <span> Kullanıcılar </span>
+                        </a>
+                    </li>
+                    
+                    <li class="side-nav-item">
+                        <a href="{% url 'system_settings' %}" class="side-nav-link">
+                            <i class="ri-settings-3-line"></i>
+                            <span> Sistem Ayarları </span>
                         </a>
                     </li>
                 {% endif %}
 
+                {% if user.is_resident %}
+                    <!-- Daire Sakini Menüsü -->
+                    <li class="side-nav-title">Daire İşlemleri</li>
+                    
+                    <li class="side-nav-item">
+                        <a href="{% url 'resident_apartment_list' %}" class="side-nav-link">
+                            <i class="ri-home-4-line"></i>
+                            <span> Dairelerim </span>
+                        </a>
+                    </li>
+                    
+                    <li class="side-nav-item">
+                        <a href="{% url 'resident_dues_list' %}" class="side-nav-link">
+                            <i class="ri-money-dollar-box-line"></i>
+                            <span> Aidat Ödemeleri </span>
+                            <span class="badge bg-warning rounded-pill float-end" id="unpaid-dues-badge"></span>
+                        </a>
+                    </li>
+                    
+                    <li class="side-nav-item">
+                        <a href="{% url 'resident_announcement_list' %}" class="side-nav-link">
+                            <i class="ri-notification-2-line"></i>
+                            <span> Duyurular </span>
+                        </a>
+                    </li>
+                    
+                    <li class="side-nav-item">
+                        <a href="{% url 'resident_complaint_list' %}" class="side-nav-link">
+                            <i class="ri-feedback-line"></i>
+                            <span> Şikayet ve Talepler </span>
+                        </a>
+                    </li>
+                    
+                    <li class="side-nav-item">
+                        <a href="{% url 'resident_package_list' %}" class="side-nav-link">
+                            <i class="ri-inbox-archive-line"></i>
+                            <span> Paketlerim </span>
+                            <span class="badge bg-primary rounded-pill float-end" id="new-packages-badge"></span>
+                        </a>
+                    </li>
+                {% endif %}
+
+                {% if user.is_caretaker %}
+                    <!-- Kapıcı Menüsü -->
+                    <li class="side-nav-title">Kapıcı Paneli</li>
+                    
+                    <li class="side-nav-item">
+                        <a href="{% url 'caretaker_building_list' %}" class="side-nav-link">
+                            <i class="ri-building-line"></i>
+                            <span> Sorumlu Binalarım </span>
+                        </a>
+                    </li>
+                    
+                    <li class="side-nav-item">
+                        <a href="{% url 'caretaker_task_list' %}" class="side-nav-link">
+                            <i class="ri-task-line"></i>
+                            <span> Görevlerim </span>
+                            <span class="badge bg-danger rounded-pill float-end" id="pending-tasks-badge"></span>
+                        </a>
+                    </li>
+                    
+                    <li class="side-nav-item">
+                        <a href="{% url 'caretaker_complaint_list' %}" class="side-nav-link">
+                            <i class="ri-feedback-line"></i>
+                            <span> Şikayetler </span>
+                        </a>
+                    </li>
+                    
+                    <li class="side-nav-item">
+                        <a href="{% url 'package_create' %}" class="side-nav-link">
+                            <i class="ri-inbox-archive-line"></i>
+                            <span> Paket Kaydet </span>
+                        </a>
+                    </li>
+                {% endif %}
+                
+                <!-- Tüm kullanıcılar için ortak menü -->
+                <li class="side-nav-title">Hesabım</li>
+                
                 <li class="side-nav-item">
                     <a href="{% url 'profile' %}" class="side-nav-link">
-                        <i class="ri-user-settings-line"></i>
+                        <i class="ri-user-line"></i>
                         <span> Profilim </span>
                     </a>
                 </li>
-
+                
                 <li class="side-nav-item">
-                    <a href="{% url 'logout' %}" class="side-nav-link">
+                    <a href="{% url 'notification_list' %}" class="side-nav-link">
+                        <i class="ri-notification-4-line"></i>
+                        <span> Bildirimlerim </span>
+                        <span class="badge bg-primary rounded-pill float-end" id="notification-sidebar-badge"></span>
+                    </a>
+                </li>
+                
+                <li class="side-nav-item">
+                    <a href="{% url 'change_password' %}" class="side-nav-link">
+                        <i class="ri-lock-password-line"></i>
+                        <span> Şifre Değiştir </span>
+                    </a>
+                </li>
+                
+                <li class="side-nav-item">
+                    <a href="{% url 'logout' %}" class="side-nav-link text-danger">
                         <i class="ri-logout-box-line"></i>
-                        <span> Çıkış </span>
+                        <span> Çıkış Yap </span>
                     </a>
                 </li>
             {% else %}
+                <!-- Giriş yapmamış kullanıcılar için menü -->
                 <li class="side-nav-item">
                     <a href="{% url 'login' %}" class="side-nav-link">
                         <i class="ri-login-box-line"></i>
-                        <span> Giriş </span>
+                        <span> Giriş Yap </span>
                     </a>
                 </li>
-
+                
                 <li class="side-nav-item">
                     <a href="{% url 'register' %}" class="side-nav-link">
                         <i class="ri-user-add-line"></i>
@@ -186,15 +282,146 @@
                 </li>
             {% endif %}
         </ul>
-
-        <!-- Help Box -->
-        <div class="help-box text-center">
-            <h5 class="fw-semibold fs-16">Yardıma mı ihtiyacınız var?</h5>
-            <p class="mb-3 text-muted">Herhangi bir sorunda destek ekibimizle iletişime geçin</p>
-            <a href="mailto:support@apartman.com" class="btn btn-primary btn-sm">İletişim</a>
-        </div>
-
-        <div class="clearfix"></div>
     </div>
 </div>
 <!-- Sidenav Menu End -->
+
+<style>
+    /* Sidebar iyileştirmeleri */
+    .sidenav-menu {
+        transition: all 0.3s ease;
+    }
+    
+    .side-nav-item .menu-arrow {
+        transform: rotate(0deg);
+        transition: transform 0.3s;
+    }
+    
+    .side-nav-item .menu-arrow[aria-expanded="true"] {
+        transform: rotate(90deg);
+    }
+    
+    .sidebar-user {
+        background-color: rgba(var(--bs-primary-rgb), 0.05);
+    }
+    
+    /* Mobil uyarlamalar */
+    @media (max-width: 991.98px) {
+        .sidenav-menu {
+            left: -260px;
+            z-index: 1050;
+        }
+        
+        .sidenav-menu.sidenav-open {
+            left: 0;
+        }
+        
+        .page-content.content-expanded {
+            margin-left: 0;
+        }
+    }
+    
+    /* Daha iyi hover efektleri */
+    .side-nav-link {
+        position: relative;
+        transition: all 0.3s ease;
+    }
+    
+    .side-nav-link:hover {
+        background-color: rgba(var(--bs-primary-rgb), 0.1);
+    }
+    
+    .side-nav-link.active::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 3px;
+        background-color: var(--bs-primary);
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Sidebar Collapse Butonu
+        const collapseMenuBtn = document.getElementById('collapse-menu-btn');
+        const sidebar = document.querySelector('.sidenav-menu');
+        const pageContent = document.querySelector('.page-content');
+        
+        if (collapseMenuBtn) {
+            collapseMenuBtn.addEventListener('click', function() {
+                sidebar.classList.toggle('sidebar-collapsed');
+                pageContent.classList.toggle('expanded-content');
+            });
+        }
+        
+        // Mobil ekranlarda sidebar kapatma butonu
+        const closeSidebarBtn = document.getElementById('close-sidebar-btn');
+        if (closeSidebarBtn) {
+            closeSidebarBtn.addEventListener('click', function() {
+                sidebar.classList.remove('sidenav-open');
+                pageContent.classList.remove('content-expanded');
+            });
+        }
+        
+        // Aktif menü elemanını işaretle
+        const currentPath = window.location.pathname;
+        const menuLinks = document.querySelectorAll('.side-nav-link');
+        
+        menuLinks.forEach(link => {
+            if (link.getAttribute('href') === currentPath) {
+                link.classList.add('active');
+                
+                // Üst menüyü aç (dropdown varsa)
+                const parentDropdown = link.closest('.collapse');
+                if (parentDropdown) {
+                    parentDropdown.classList.add('show');
+                    const parentButton = document.querySelector(`[aria-controls="${parentDropdown.id}"]`);
+                    if (parentButton) {
+                        parentButton.setAttribute('aria-expanded', 'true');
+                    }
+                }
+            }
+        });
+        
+        // Rozet bilgilerini güncelle (AJAX ile alınabilir)
+        function updateBadges() {
+            fetch('/api/badges/')
+                .then(response => response.json())
+                .then(data => {
+                    // Şikayet rozeti
+                    updateBadge('new-complaints-badge', data.new_complaints || 0);
+                    
+                    // Ödenmemiş aidat rozeti
+                    updateBadge('unpaid-dues-badge', data.unpaid_dues || 0);
+                    
+                    // Yeni paket rozeti
+                    updateBadge('new-packages-badge', data.new_packages || 0);
+                    
+                    // Bekleyen görev rozeti
+                    updateBadge('pending-tasks-badge', data.pending_tasks || 0);
+                    
+                    // Bildirim rozeti
+                    updateBadge('notification-sidebar-badge', data.unread_notifications || 0);
+                })
+                .catch(error => console.error('Rozet bilgileri yüklenirken hata oluştu:', error));
+        }
+        
+        function updateBadge(id, count) {
+            const badge = document.getElementById(id);
+            if (badge) {
+                if (count > 0) {
+                    badge.textContent = count > 99 ? '99+' : count;
+                    badge.style.display = 'inline-block';
+                } else {
+                    badge.style.display = 'none';
+                }
+            }
+        }
+        
+        // İlk yükleme ve periyodik güncelleme
+        updateBadges();
+        setInterval(updateBadges, 60000); // Her 1 dakikada bir güncelle
+    });
+</script>

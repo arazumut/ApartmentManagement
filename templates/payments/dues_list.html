@@ -1,13 +1,158 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}Aidatlar{% endblock %}
 
+{% block extra_css %}
+<link href="{% static 'vendor/daterangepicker/daterangepicker.css' %}" rel="stylesheet" type="text/css" />
+<style>
+    .status-unpaid { color: #f1556c; }
+    .status-paid { color: #1abc9c; }
+    .status-partial { color: #f7b84b; }
+    .status-overdue { color: #d63939; }
+    
+    .card-stats {
+        border-radius: 10px;
+        min-height: 100px;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .card-stats .stats-icon {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        font-size: 28px;
+        opacity: 0.3;
+    }
+    
+    .card-stats .stats-number {
+        font-size: 24px;
+        font-weight: 700;
+    }
+    
+    .card-stats .stats-title {
+        font-size: 14px;
+        color: #888;
+    }
+    
+    .filter-form {
+        background-color: rgba(255,255,255,0.03);
+        border-radius: 10px;
+        padding: 15px;
+        margin-bottom: 20px;
+    }
+    
+    .payment-card {
+        transition: all 0.3s ease;
+    }
+    
+    .payment-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    
+    @media (max-width: 767.98px) {
+        .table-responsive table {
+            min-width: 800px;
+        }
+    }
+</style>
+{% endblock %}
+
 {% block content %}
-<div class="container">
+<div class="container-fluid">
     <div class="row">
         <div class="col-12">
             <div class="page-title-box">
-                <h4 class="page-title">Aidatlar</h4>
+                <div class="page-title-right">
+                    <ol class="breadcrumb m-0">
+                        <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Ana Sayfa</a></li>
+                        <li class="breadcrumb-item active">Aidatlar</li>
+                    </ol>
+                </div>
+                <h4 class="page-title">Aidatlar ve Ödemeler</h4>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Filtreleme Formu -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body filter-form">
+                    <form method="get" class="row">
+                        <div class="col-md-3 mb-2">
+                            <label for="building">Bina</label>
+                            <select class="form-select" id="building" name="building">
+                                <option value="">Tümü</option>
+                                {% for building in buildings %}
+                                <option value="{{ building.id }}" {% if selected_building == building.id %}selected{% endif %}>
+                                    {{ building.name }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-3 mb-2">
+                            <label for="status">Durum</label>
+                            <select class="form-select" id="status" name="status">
+                                <option value="">Tümü</option>
+                                <option value="unpaid" {% if selected_status == 'unpaid' %}selected{% endif %}>Ödenmemiş</option>
+                                <option value="paid" {% if selected_status == 'paid' %}selected{% endif %}>Ödenmiş</option>
+                                <option value="partial" {% if selected_status == 'partial' %}selected{% endif %}>Kısmi Ödeme</option>
+                                <option value="overdue" {% if selected_status == 'overdue' %}selected{% endif %}>Gecikmiş</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4 mb-2">
+                            <label for="date_range">Tarih Aralığı</label>
+                            <input type="text" class="form-control date-range-picker" id="date_range" name="date_range" 
+                                value="{{ date_range|default:'Son 3 Ay' }}">
+                        </div>
+                        <div class="col-md-2 mb-2 d-flex align-items-end">
+                            <button type="submit" class="btn btn-primary w-100">Filtrele</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- İstatistikler -->
+    <div class="row">
+        <div class="col-md-3">
+            <div class="card card-stats bg-primary text-white">
+                <div class="card-body">
+                    <div class="stats-icon"><i class="ri-money-dollar-circle-line"></i></div>
+                    <div class="stats-number">{{ total_amount|floatformat:2 }}₺</div>
+                    <div class="stats-title">Toplam Aidat</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card card-stats bg-success text-white">
+                <div class="card-body">
+                    <div class="stats-icon"><i class="ri-check-double-line"></i></div>
+                    <div class="stats-number">{{ paid_amount|floatformat:2 }}₺</div>
+                    <div class="stats-title">Ödenen Tutar</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card card-stats bg-danger text-white">
+                <div class="card-body">
+                    <div class="stats-icon"><i class="ri-close-circle-line"></i></div>
+                    <div class="stats-number">{{ unpaid_amount|floatformat:2 }}₺</div>
+                    <div class="stats-title">Ödenmemiş Tutar</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card card-stats bg-warning text-white">
+                <div class="card-body">
+                    <div class="stats-icon"><i class="ri-time-line"></i></div>
+                    <div class="stats-number">{{ late_fee_amount|floatformat:2 }}₺</div>
+                    <div class="stats-title">Gecikme Bedeli</div>
+                </div>
             </div>
         </div>
     </div>
@@ -22,6 +167,19 @@
                                 <i class="ri-add-line mr-1"></i> Yeni Aidat Ekle
                             </a>
                         </div>
+                        <div class="col-sm-8 text-sm-end">
+                            <div class="btn-group mb-2">
+                                <button type="button" class="btn btn-light" id="exportExcel">
+                                    <i class="ri-file-excel-line"></i> Excel
+                                </button>
+                                <button type="button" class="btn btn-light" id="exportPdf">
+                                    <i class="ri-file-pdf-line"></i> PDF
+                                </button>
+                                <button type="button" class="btn btn-light" id="print">
+                                    <i class="ri-printer-line"></i> Yazdır
+                                </button>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="table-responsive">
@@ -31,24 +189,149 @@
                                     <th>ID</th>
                                     <th>Bina</th>
                                     <th>Daire</th>
-                                    <th>Ay</th>
+                                    <th>Dönem</th>
                                     <th>Tutar</th>
-                                    <th>Ödeme Durumu</th>
+                                    <th>Ödenen</th>
+                                    <th>Son Ödeme</th>
+                                    <th>Durumu</th>
                                     <th>İşlemler</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td colspan="7" class="text-center">
-                                        Henüz kayıtlı aidat bulunmamaktadır.
-                                    </td>
-                                </tr>
+                                {% if apartment_dues_list %}
+                                    {% for dues in apartment_dues_list %}
+                                    <tr class="payment-card">
+                                        <td>{{ dues.id }}</td>
+                                        <td>{{ dues.apartment.building.name }}</td>
+                                        <td>{% if dues.apartment.block %}Blok: {{ dues.apartment.block }}{% endif %} No: {{ dues.apartment.number }}</td>
+                                        <td>{{ dues.dues.month }}/{{ dues.dues.year }}</td>
+                                        <td>{{ dues.amount|floatformat:2 }}₺</td>
+                                        <td>{{ dues.paid_amount|floatformat:2 }}₺</td>
+                                        <td>{{ dues.due_date }}</td>
+                                        <td>
+                                            {% if dues.status == 'unpaid' %}
+                                                <span class="badge bg-danger-subtle text-danger status-unpaid">Ödenmedi</span>
+                                            {% elif dues.status == 'paid' %}
+                                                <span class="badge bg-success-subtle text-success status-paid">Ödendi</span>
+                                            {% elif dues.status == 'partial' %}
+                                                <span class="badge bg-warning-subtle text-warning status-partial">Kısmi Ödendi</span>
+                                            {% elif dues.status == 'overdue' %}
+                                                <span class="badge bg-danger-subtle text-danger status-overdue">Gecikti</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            <div class="btn-group">
+                                                <a href="{% url 'apartment_dues_detail' dues.id %}" class="btn btn-sm btn-light">
+                                                    <i class="ri-eye-line"></i>
+                                                </a>
+                                                {% if dues.status != 'paid' %}
+                                                <a href="{% url 'record_payment' dues.id %}" class="btn btn-sm btn-success">
+                                                    <i class="ri-money-dollar-circle-line"></i> Ödeme
+                                                </a>
+                                                {% endif %}
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                {% else %}
+                                    <tr>
+                                        <td colspan="9" class="text-center">
+                                            Henüz kayıtlı aidat bulunmamaktadır.
+                                        </td>
+                                    </tr>
+                                {% endif %}
                             </tbody>
                         </table>
                     </div>
+                    
+                    <!-- Pagination -->
+                    {% if apartment_dues_list.has_other_pages %}
+                    <div class="row mt-4">
+                        <div class="col-sm-12">
+                            <div class="float-end">
+                                <ul class="pagination pagination-rounded mb-0">
+                                    {% if apartment_dues_list.has_previous %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ apartment_dues_list.previous_page_number }}{% if request.GET.building %}&building={{ request.GET.building }}{% endif %}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}{% if request.GET.date_range %}&date_range={{ request.GET.date_range }}{% endif %}" aria-label="Previous">
+                                            <span aria-hidden="true">&laquo;</span>
+                                        </a>
+                                    </li>
+                                    {% endif %}
+                                    
+                                    {% for i in apartment_dues_list.paginator.page_range %}
+                                        {% if apartment_dues_list.number == i %}
+                                        <li class="page-item active">
+                                            <a class="page-link" href="#">{{ i }}</a>
+                                        </li>
+                                        {% elif i > apartment_dues_list.number|add:'-3' and i < apartment_dues_list.number|add:'3' %}
+                                        <li class="page-item">
+                                            <a class="page-link" href="?page={{ i }}{% if request.GET.building %}&building={{ request.GET.building }}{% endif %}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}{% if request.GET.date_range %}&date_range={{ request.GET.date_range }}{% endif %}">{{ i }}</a>
+                                        </li>
+                                        {% endif %}
+                                    {% endfor %}
+                                    
+                                    {% if apartment_dues_list.has_next %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ apartment_dues_list.next_page_number }}{% if request.GET.building %}&building={{ request.GET.building }}{% endif %}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}{% if request.GET.date_range %}&date_range={{ request.GET.date_range }}{% endif %}" aria-label="Next">
+                                            <span aria-hidden="true">&raquo;</span>
+                                        </a>
+                                    </li>
+                                    {% endif %}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
                 </div>
             </div>
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'vendor/daterangepicker/moment.min.js' %}"></script>
+<script src="{% static 'vendor/daterangepicker/daterangepicker.js' %}"></script>
+<script>
+$(document).ready(function() {
+    // Tarih aralığı seçici
+    $('.date-range-picker').daterangepicker({
+        ranges: {
+           'Bugün': [moment(), moment()],
+           'Dün': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+           'Son 7 Gün': [moment().subtract(6, 'days'), moment()],
+           'Son 30 Gün': [moment().subtract(29, 'days'), moment()],
+           'Son 3 Ay': [moment().subtract(3, 'months'), moment()],
+           'Bu Ay': [moment().startOf('month'), moment().endOf('month')],
+           'Geçen Ay': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+        },
+        locale: {
+            format: 'DD/MM/YYYY',
+            applyLabel: 'Uygula',
+            cancelLabel: 'İptal',
+            fromLabel: 'Başlangıç',
+            toLabel: 'Bitiş',
+            customRangeLabel: 'Özel Aralık',
+            daysOfWeek: ['Pz', 'Pt', 'Sa', 'Ça', 'Pe', 'Cu', 'Ct'],
+            monthNames: ['Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran', 'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık'],
+            firstDay: 1
+        },
+        startDate: moment().subtract(3, 'months'),
+        endDate: moment()
+    });
+    
+    // Export butonları
+    $('#exportExcel').click(function() {
+        window.location.href = '{% url "export_dues_excel" %}' + window.location.search;
+    });
+    
+    $('#exportPdf').click(function() {
+        window.location.href = '{% url "export_dues_pdf" %}' + window.location.search;
+    });
+    
+    $('#print').click(function() {
+        window.print();
+    });
+});
+</script>
 {% endblock %}
