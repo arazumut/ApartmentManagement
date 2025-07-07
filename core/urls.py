@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import HomeView, DashboardView
+from .views import HomeView, DashboardView, badges_api
 
 urlpatterns = [
     path('', HomeView.as_view(), name='home'),

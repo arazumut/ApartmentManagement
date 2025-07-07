@@ -880,3 +880,46 @@ INFO 2025-07-07 18:11:38,558 basehttp 3152 6170898432 "GET /api/schema/ HTTP/1.1
 INFO 2025-07-07 18:12:30,879 basehttp 3152 6170898432 "GET /api/schema/ HTTP/1.1" 200 158916
 INFO 2025-07-07 18:12:54,401 autoreload 3152 8599723776 /Users/umutaraz/Desktop/Tüm Projelerim/ApartmentManagement/packages/models.py changed, reloading.
 INFO 2025-07-07 18:12:55,449 autoreload 4373 8599723776 Watching for file changes with StatReloader
+INFO 2025-07-07 18:25:56,879 autoreload 9064 8599723776 Watching for file changes with StatReloader
+INFO 2025-07-07 18:25:58,977 basehttp 9064 6160576512 "GET / HTTP/1.1" 200 22186
+WARNING 2025-07-07 18:25:59,086 basehttp 9064 6160576512 "GET /static/images/building.svg HTTP/1.1" 404 1984
+WARNING 2025-07-07 18:25:59,424 log 9064 6177402880 Not Found: /api/badges/
+WARNING 2025-07-07 18:25:59,426 log 9064 6160576512 Not Found: /notifications/ajax/list/
+WARNING 2025-07-07 18:25:59,426 basehttp 9064 6177402880 "GET /api/badges/ HTTP/1.1" 404 6667
+WARNING 2025-07-07 18:25:59,427 basehttp 9064 6160576512 "GET /notifications/ajax/list/ HTTP/1.1" 404 6898
+INFO 2025-07-07 18:26:01,511 basehttp 9064 6160576512 "GET /users/login/ HTTP/1.1" 200 20627
+WARNING 2025-07-07 18:26:01,533 basehttp 9064 6160576512 "GET /static/images/logo-light.png HTTP/1.1" 404 1990
+WARNING 2025-07-07 18:26:01,536 log 9064 6194229248 Not Found: /notifications/ajax/list/
+WARNING 2025-07-07 18:26:01,539 log 9064 6177402880 Not Found: /api/badges/
+WARNING 2025-07-07 18:26:01,541 basehttp 9064 6194229248 "GET /notifications/ajax/list/ HTTP/1.1" 404 6898
+WARNING 2025-07-07 18:26:01,542 basehttp 9064 6177402880 "GET /api/badges/ HTTP/1.1" 404 6667
+INFO 2025-07-07 18:26:05,315 basehttp 9064 6160576512 "GET /users/register/ HTTP/1.1" 200 21048
+WARNING 2025-07-07 18:26:05,330 basehttp 9064 6160576512 "GET /static/images/logo-light.png HTTP/1.1" 404 1990
+WARNING 2025-07-07 18:26:05,350 log 9064 6177402880 Not Found: /api/badges/
+WARNING 2025-07-07 18:26:05,353 log 9064 6194229248 Not Found: /notifications/ajax/list/
+WARNING 2025-07-07 18:26:05,353 basehttp 9064 6177402880 "GET /api/badges/ HTTP/1.1" 404 6667
+WARNING 2025-07-07 18:26:05,353 basehttp 9064 6194229248 "GET /notifications/ajax/list/ HTTP/1.1" 404 6898
+INFO 2025-07-07 18:27:45,029 autoreload 9064 8599723776 /Users/umutaraz/Desktop/Tüm Projelerim/ApartmentManagement/core/views.py changed, reloading.
+INFO 2025-07-07 18:27:46,174 autoreload 9974 8599723776 Watching for file changes with StatReloader
+INFO 2025-07-07 18:28:15,412 autoreload 9974 8599723776 /Users/umutaraz/Desktop/Tüm Projelerim/ApartmentManagement/notifications/views.py changed, reloading.
+INFO 2025-07-07 18:28:16,148 autoreload 10249 8599723776 Watching for file changes with StatReloader
+INFO 2025-07-07 18:28:39,033 autoreload 10249 8599723776 /Users/umutaraz/Desktop/Tüm Projelerim/ApartmentManagement/core/urls.py changed, reloading.
+INFO 2025-07-07 18:28:39,672 autoreload 10443 8599723776 Watching for file changes with StatReloader
+INFO 2025-07-07 18:28:54,051 basehttp 10443 6196293632 "GET / HTTP/1.1" 200 22186
+WARNING 2025-07-07 18:28:54,135 basehttp 10443 6196293632 "GET /static/images/building.svg HTTP/1.1" 404 1984
+WARNING 2025-07-07 18:28:54,189 log 10443 6213120000 Not Found: /api/badges/
+WARNING 2025-07-07 18:28:54,193 log 10443 6196293632 Not Found: /notifications/ajax/list/
+WARNING 2025-07-07 18:28:54,193 basehttp 10443 6213120000 "GET /api/badges/ HTTP/1.1" 404 6667
+WARNING 2025-07-07 18:28:54,195 basehttp 10443 6196293632 "GET /notifications/ajax/list/ HTTP/1.1" 404 6898
+WARNING 2025-07-07 18:28:59,060 log 10443 6196293632 Not Found: /api/
+WARNING 2025-07-07 18:28:59,060 basehttp 10443 6196293632 "GET /api/ HTTP/1.1" 404 6646
+WARNING 2025-07-07 18:29:02,047 log 10443 6196293632 Not Found: /ap/docs
+WARNING 2025-07-07 18:29:02,047 basehttp 10443 6196293632 "GET /ap/docs HTTP/1.1" 404 5543
+INFO 2025-07-07 18:29:04,853 autoreload 10443 8599723776 /Users/umutaraz/Desktop/Tüm Projelerim/ApartmentManagement/notifications/urls.py changed, reloading.
+INFO 2025-07-07 18:29:05,481 autoreload 10665 8599723776 Watching for file changes with StatReloader
+WARNING 2025-07-07 18:29:05,902 log 10665 6192181248 Not Found: /ap/docs/
+WARNING 2025-07-07 18:29:05,902 basehttp 10665 6192181248 "GET /ap/docs/ HTTP/1.1" 404 5546
+INFO 2025-07-07 18:29:36,673 autoreload 10665 8599723776 /Users/umutaraz/Desktop/Tüm Projelerim/ApartmentManagement/apartment_project/urls.py changed, reloading.
+INFO 2025-07-07 18:29:37,402 autoreload 10941 8599723776 Watching for file changes with StatReloader
+INFO 2025-07-07 18:30:35,713 autoreload 10941 8599723776 /Users/umutaraz/Desktop/Tüm Projelerim/ApartmentManagement/apartment_project/urls.py changed, reloading.
+INFO 2025-07-07 18:30:36,506 autoreload 11433 8599723776 Watching for file changes with StatReloader

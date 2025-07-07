@@ -64,3 +64,31 @@ def get_recent_notifications(request):
         })
     
     return JsonResponse({'notifications': data})
+
+
+@login_required
+def ajax_notification_list(request):
+    """AJAX endpoint for notification list used in topbar"""
+    notifications = Notification.objects.filter(user=request.user).order_by('-created_at')[:10]
+    
+    # Serialize notifications to JSON
+    data = []
+    for notification in notifications:
+        data.append({
+            'id': notification.id,
+            'title': notification.title,
+            'message': notification.message,
+            'type': notification.notification_type,
+            'is_read': notification.is_read,
+            'link': notification.link,
+            'created_at': notification.created_at.strftime('%d.%m.%Y %H:%M'),
+            'icon': notification.get_icon(),
+        })
+    
+    unread_count = Notification.objects.filter(user=request.user, is_read=False).count()
+    
+    return JsonResponse({
+        'notifications': data,
+        'unread_count': unread_count,
+        'success': True
+    })

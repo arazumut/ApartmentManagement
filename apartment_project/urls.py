@@ -20,6 +20,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.views.generic import TemplateView, RedirectView
 from django.contrib.auth.views import LoginView, LogoutView
+from core.views import badges_api
 
 # Main URL patterns
 urlpatterns = [
@@ -44,6 +45,7 @@ urlpatterns = [
     
     # API URLs - All under /api/
     path('api/', include('apartment_project.api_urls')),
+    path('api/badges/', badges_api, name='api_badges'),
     
     # Legacy API endpoints (kept for backward compatibility)
     # These will be removed in future versions

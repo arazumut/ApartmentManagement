@@ -7,6 +7,7 @@ from django.utils import timezone
 from django.http import JsonResponse
 from datetime import datetime, timedelta
 from decimal import Decimal
+from django.views.decorators.csrf import csrf_exempt
 
 from buildings.models import Building, Apartment
 from payments.models import Dues, ApartmentDues, Expense, Payment
@@ -400,6 +401,77 @@ class DashboardStatsAPIView(LoginRequiredMixin, TemplateView):
             }
         
         return JsonResponse(stats)
+
+
+@login_required
+def badges_api(request):
+    """API endpoint for badges/counts used in sidebar"""
+    user = request.user
+    
+    # Initialize counts
+    data = {
+        'pending_complaints': 0,
+        'unread_notifications': 0,
+        'pending_payments': 0,
+        'new_announcements': 0,
+        'pending_packages': 0,
+        'active_tasks': 0,
+    }
+    
+    try:
+        # Get unread notifications count
+        data['unread_notifications'] = Notification.objects.filter(
+            user=user, 
+            is_read=False
+        ).count()
+        
+        # Get pending complaints count based on user role
+        if user.is_admin or user.is_caretaker:
+            data['pending_complaints'] = Complaint.objects.filter(
+                status__in=['open', 'in_progress']
+            ).count()
+        else:
+            data['pending_complaints'] = Complaint.objects.filter(
+                user=user,
+                status__in=['open', 'in_progress']
+            ).count()
+        
+        # Get new announcements count (last 7 days)
+        week_ago = timezone.now() - timedelta(days=7)
+        data['new_announcements'] = Announcement.objects.filter(
+            created_at__gte=week_ago,
+            status='published'
+        ).count()
+        
+        # Get pending packages count (for caretakers)
+        if user.is_caretaker:
+            from packages.models import Package
+            data['pending_packages'] = Package.objects.filter(
+                status='pending',
+                building__caretaker=user
+            ).count()
+        
+        # Get active tasks count (for caretakers)
+        if user.is_caretaker:
+            from caretaker.models import Task
+            data['active_tasks'] = Task.objects.filter(
+                assigned_to=user,
+                status__in=['pending', 'in_progress']
+            ).count()
+        
+        # Get pending payments count
+        if user.is_resident:
+            from payments.models import ApartmentDues
+            data['pending_payments'] = ApartmentDues.objects.filter(
+                apartment__resident=user,
+                is_paid=False
+            ).count()
+        
+    except Exception as e:
+        # Log error but don't fail
+        print(f"Error in badges_api: {e}")
+    
+    return JsonResponse(data)
 
 
 def handler404(request, exception):
