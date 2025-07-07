@@ -18,35 +18,40 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, RedirectView
 from django.contrib.auth.views import LoginView, LogoutView
-from users.views import register
-from django.views.generic import RedirectView
 
-# Geçici olarak temel URL'leri etkinleştiriyoruz
+# Main URL patterns
 urlpatterns = [
+    # Admin
     path('admin/', admin.site.urls),
-    path('', TemplateView.as_view(template_name='core/home.html'), name='home'),
-    path('dashboard/', TemplateView.as_view(template_name='core/dashboard.html'), name='dashboard'),
-    path('profile/', TemplateView.as_view(template_name='users/profile.html'), name='profile'),
-    path('login/', LoginView.as_view(template_name='users/login.html'), name='login'),
-    path('logout/', LogoutView.as_view(), name='logout'),
-    path('register/', register, name='register'),  # Add register view at top level
-    path('building_list/', RedirectView.as_view(url='/buildings/', permanent=False), name='building_list'),  # Redirect for compatibility
-    path('apartment_list/', RedirectView.as_view(url='/buildings/apartments/', permanent=False), name='apartment_list'),  # Redirect for compatibility
-    path('dues_list/', RedirectView.as_view(url='/payments/dues/', permanent=False), name='dues_list'),  # Redirect for compatibility
-    path('expense_list/', RedirectView.as_view(url='/payments/expenses/', permanent=False), name='expense_list'),  # Redirect for compatibility
-    path('announcement_list/', RedirectView.as_view(url='/announcements/', permanent=False), name='announcement_list'),  # Redirect for compatibility
-    path('complaint_list/', RedirectView.as_view(url='/complaints/', permanent=False), name='complaint_list'),  # Redirect for compatibility
+    
+    # Home and dashboard
+    path('', include('core.urls')),
+    
+    # Authentication
     path('accounts/', include('allauth.urls')),
-    path('users/', include('users.urls')),  # Include users app URLs
-    path('buildings/', include('buildings.urls')),  # Include buildings app URLs
-    path('payments/', include('payments.urls')),  # Include payments app URLs
-    path('announcements/', include('announcements.urls')),  # Include announcements app URLs
-    path('complaints/', include('complaints.urls')),  # Include complaints app URLs
-    path('', include('caretaker.urls')),  # Include caretaker app URLs without prefix
-    path('', include('packages.urls')),  # Include packages app URLs without prefix
-    path('notifications/', include('notifications.urls')),  # Include notifications app URLs
+    
+    # App URLs
+    path('users/', include('users.urls')),
+    path('buildings/', include('buildings.urls')),
+    path('payments/', include('payments.urls')),
+    path('complaints/', include('complaints.urls')),
+    path('announcements/', include('announcements.urls')),
+    path('caretaker/', include('caretaker.urls')),
+    path('packages/', include('packages.urls')),
+    path('notifications/', include('notifications.urls')),
+    
+    # API URLs
+    path('api/v1/users/', include('users.api_urls')),
+    path('api/v1/buildings/', include('buildings.api_urls')),
+    path('api/v1/payments/', include('payments.api_urls')),
+    path('api/v1/complaints/', include('complaints.api_urls')),
+    path('api/v1/announcements/', include('announcements.api_urls')),
+    path('api/v1/notifications/', include('notifications.api_urls')),
+    
+    # REST Framework browsable API
+    path('api-auth/', include('rest_framework.urls')),
 ]
 
 # Serve media files in development
@@ -55,5 +60,5 @@ if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 # Custom error handlers
-handler404 = 'django.views.defaults.page_not_found'
-handler500 = 'django.views.defaults.server_error'
+handler404 = 'core.views.handler404'
+handler500 = 'core.views.handler500'

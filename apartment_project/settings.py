@@ -51,9 +51,12 @@ INSTALLED_APPS = [
     
     # Third party apps
     'rest_framework',
+    'rest_framework.authtoken',
     'crispy_forms',
+    'crispy_bootstrap5',
     'allauth',
     'allauth.account',
+    'corsheaders',
     
     # Local apps
     'core',
@@ -68,6 +71,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',  # Whitenoise for static files
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -184,48 +188,195 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 # Django REST Framework
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
     ],
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
     ],
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 20,
+    'DEFAULT_FILTER_BACKENDS': [
+        'rest_framework.filters.SearchFilter',
+        'rest_framework.filters.OrderingFilter',
+    ],
+    'DEFAULT_RENDERER_CLASSES': [
+        'rest_framework.renderers.JSONRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer',
+    ],
 }
 
-# Unfold Admin Theme Settings
-UNFOLD = {
-    "SITE_TITLE": "Apartment Management",
-    "SITE_HEADER": "Apartment Management",
-    "SITE_URL": "/",
-    "SITE_ICON": "",  # Boş bırakırsanız varsayılan ikon kullanılır
-    "TABS": False,  # Sekmeli gezinme için True yapabilirsiniz
-    "STYLES": [
-        "unfold/styles.css",
-    ],
-    "SCRIPTS": [
-        "unfold/scripts.js",
-    ],
-    "COLORS": {
-        "primary": {
-            "50": "250 245 255",
-            "100": "243 232 255",
-            "200": "233 213 255",
-            "300": "216 180 254",
-            "400": "192 132 252",
-            "500": "168 85 247",
-            "600": "147 51 234",
-            "700": "126 34 206",
-            "800": "107 33 168",
-            "900": "88 28 135",
-            "950": "59 7 100",
+# CORS settings for API
+CORS_ALLOW_ALL_ORIGINS = DEBUG  # Only in development
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",  # React frontend
+    "http://127.0.0.1:3000",
+]
+
+# Crispy Forms configuration
+CRISPY_ALLOWED_TEMPLATE_PACKS = 'bootstrap5'
+CRISPY_TEMPLATE_PACK = 'bootstrap5'
+
+# Custom user model
+AUTH_USER_MODEL = 'users.User'
+
+# Email configuration
+EMAIL_BACKEND = env('EMAIL_BACKEND', default='django.core.mail.backends.console.EmailBackend')
+EMAIL_HOST = env('EMAIL_HOST', default='smtp.gmail.com')
+EMAIL_PORT = env('EMAIL_PORT', default=587)
+EMAIL_USE_TLS = env('EMAIL_USE_TLS', default=True)
+EMAIL_HOST_USER = env('EMAIL_HOST_USER', default='')
+EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD', default='')
+DEFAULT_FROM_EMAIL = env('DEFAULT_FROM_EMAIL', default='noreply@apartmentmanagement.com')
+
+# SMS Configuration (for future use)
+SMS_BACKEND = env('SMS_BACKEND', default='django.core.mail.backends.console.EmailBackend')
+SMS_API_KEY = env('SMS_API_KEY', default='')
+SMS_API_SECRET = env('SMS_API_SECRET', default='')
+
+# File upload settings
+FILE_UPLOAD_MAX_MEMORY_SIZE = 5 * 1024 * 1024  # 5MB
+DATA_UPLOAD_MAX_MEMORY_SIZE = 10 * 1024 * 1024  # 10MB
+
+# Cache configuration
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+        'LOCATION': env('REDIS_URL', default='redis://127.0.0.1:6379/1'),
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+        }
+    }
+}
+
+# Session configuration
+SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
+SESSION_CACHE_ALIAS = 'default'
+SESSION_COOKIE_AGE = 86400  # 24 hours
+
+# Logging configuration
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
+            'style': '{',
+        },
+        'simple': {
+            'format': '{levelname} {message}',
+            'style': '{',
         },
     },
-    "EXTENSIONS": {
-        "modeltranslation": False,
+    'handlers': {
+        'file': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, 'logs', 'apartment_management.log'),
+            'formatter': 'verbose',
+        },
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple',
+        },
     },
-    # Basitleştirilmiş kenar çubuğu yapılandırması
-    "SIDEBAR": {
-        "show_search": True,
-        "show_all_applications": True,
+    'root': {
+        'handlers': ['console', 'file'],
+        'level': 'INFO',
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console', 'file'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+        'apartment_project': {
+            'handlers': ['console', 'file'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
     },
 }
+
+# Security settings
+SECURE_BROWSER_XSS_FILTER = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
+X_FRAME_OPTIONS = 'DENY'
+SECURE_HSTS_SECONDS = 31536000 if not DEBUG else 0
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True
+
+# Password validation
+AUTH_PASSWORD_VALIDATORS = [
+    {
+        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'OPTIONS': {
+            'min_length': 8,
+        }
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+    },
+]
+
+# Django Allauth configuration
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+ACCOUNT_USER_MODEL_EMAIL_FIELD = 'email'
+
+# Notification settings
+NOTIFICATION_BATCH_SIZE = 100
+NOTIFICATION_RETRY_ATTEMPTS = 3
+NOTIFICATION_QUEUE_PROCESSING_INTERVAL = 300  # 5 minutes
+
+# Apartment management specific settings
+APARTMENT_MANAGEMENT = {
+    'PAYMENT_GRACE_PERIOD_DAYS': 5,
+    'LATE_FEE_PERCENTAGE': 1.5,
+    'COMPLAINT_AUTO_ASSIGN': True,
+    'COMPLAINT_RESOLUTION_DAYS': 7,
+    'NOTIFICATION_BATCH_SIZE': 50,
+    'BACKUP_RETENTION_DAYS': 30,
+    'AUDIT_LOG_RETENTION_DAYS': 365,
+}
+
+# Media and static files (updated)
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# Create media directories if they don't exist
+os.makedirs(os.path.join(MEDIA_ROOT, 'profile_pics'), exist_ok=True)
+os.makedirs(os.path.join(MEDIA_ROOT, 'complaints'), exist_ok=True)
+os.makedirs(os.path.join(MEDIA_ROOT, 'announcements'), exist_ok=True)
+os.makedirs(os.path.join(MEDIA_ROOT, 'expenses'), exist_ok=True)
+os.makedirs(os.path.join(BASE_DIR, 'logs'), exist_ok=True)
+
+# Time zone and localization
+USE_TZ = True
+TIME_ZONE = 'Europe/Istanbul'
+USE_I18N = True
+USE_L10N = True
+
+# Language settings
+LANGUAGE_CODE = 'tr-TR'
+LANGUAGES = [
+    ('tr', 'Türkçe'),
+    ('en', 'English'),
+]
+
+# Custom user model
+AUTH_USER_MODEL = 'users.User'
+
+# Default primary key field type
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
