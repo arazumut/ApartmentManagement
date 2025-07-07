@@ -400,3 +400,19 @@ class DashboardStatsAPIView(LoginRequiredMixin, TemplateView):
             }
         
         return JsonResponse(stats)
+
+
+def handler404(request, exception):
+    """Custom 404 page"""
+    return render(request, 'core/404.html', {
+        'title': 'Sayfa Bulunamadı',
+        'message': 'Aradığınız sayfa bulunamadı.'
+    }, status=404)
+
+
+def handler500(request):
+    """Custom 500 page"""
+    return render(request, 'core/500.html', {
+        'title': 'Sunucu Hatası',
+        'message': 'Bir sunucu hatası oluştu. Lütfen daha sonra tekrar deneyiniz.'
+    }, status=500)

@@ -116,6 +116,54 @@ class DuesCreateView(AdminRequiredMixin, CreateView):
         return response
 
 
+class DuesDetailView(AdminRequiredMixin, DetailView):
+    model = Dues
+    template_name = 'payments/dues_detail.html'
+    context_object_name = 'dues'
+    
+    def get_queryset(self):
+        return Dues.objects.filter(building__admin=self.request.user)
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        dues = self.get_object()
+        
+        # Get apartment dues statistics
+        apartment_dues = ApartmentDues.objects.filter(dues=dues)
+        context['apartment_dues'] = apartment_dues
+        context['total_apartments'] = apartment_dues.count()
+        context['paid_apartments'] = apartment_dues.filter(is_paid=True).count()
+        context['unpaid_apartments'] = apartment_dues.filter(is_paid=False).count()
+        context['total_collected'] = apartment_dues.filter(is_paid=True).aggregate(
+            total=Sum(F('amount') + F('late_fee'))
+        )['total'] or 0
+        context['total_expected'] = apartment_dues.aggregate(
+            total=Sum(F('amount') + F('late_fee'))
+        )['total'] or 0
+        
+        return context
+
+
+class DuesUpdateView(AdminRequiredMixin, UpdateView):
+    model = Dues
+    template_name = 'payments/dues_form.html'
+    fields = ['building', 'amount', 'month', 'year', 'due_date', 'late_fee_percentage', 'description']
+    success_url = reverse_lazy('payments:dues_list')
+    
+    def get_queryset(self):
+        return Dues.objects.filter(building__admin=self.request.user)
+    
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        form.fields['building'].queryset = Building.objects.filter(admin=self.request.user)
+        return form
+    
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        messages.success(self.request, 'Aidat başarıyla güncellendi.')
+        return response
+
+
 class ExpenseListView(AdminRequiredMixin, ListView):
     model = Expense
     template_name = 'payments/expense_list.html'
@@ -174,7 +222,8 @@ class ExpenseListView(AdminRequiredMixin, ListView):
 class ExpenseCreateView(AdminRequiredMixin, CreateView):
     model = Expense
     template_name = 'payments/expense_form.html'
-    fields = ['building', 'title', 'description', 'amount', 'category', 'expense_date', 'receipt']
+    fields = ['building', 'title', 'description', 'amount', 'category', 'expense_date', 'receipt'
+    ]
     success_url = reverse_lazy('payments:expense_list')
     
     def get_form(self, form_class=None):
@@ -207,6 +256,47 @@ class ExpenseCreateView(AdminRequiredMixin, CreateView):
             )
         
         messages.success(self.request, 'Gider başarıyla kaydedildi.')
+        return response
+
+
+class ExpenseDetailView(AdminRequiredMixin, DetailView):
+    model = Expense
+    template_name = 'payments/expense_detail.html'
+    context_object_name = 'expense'
+    
+    def get_queryset(self):
+        return Expense.objects.filter(building__admin=self.request.user)
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        expense = self.get_object()
+        
+        # Add related expenses from the same building for context
+        context['related_expenses'] = Expense.objects.filter(
+            building=expense.building,
+            category=expense.category
+        ).exclude(id=expense.id).order_by('-expense_date')[:5]
+        
+        return context
+
+
+class ExpenseUpdateView(AdminRequiredMixin, UpdateView):
+    model = Expense
+    template_name = 'payments/expense_form.html'
+    fields = ['building', 'title', 'description', 'amount', 'category', 'expense_date', 'receipt']
+    success_url = reverse_lazy('payments:expense_list')
+    
+    def get_queryset(self):
+        return Expense.objects.filter(building__admin=self.request.user)
+    
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        form.fields['building'].queryset = Building.objects.filter(admin=self.request.user)
+        return form
+    
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        messages.success(self.request, 'Gider başarıyla güncellendi.')
         return response
 
 
@@ -312,6 +402,196 @@ class ResidentPaymentsView(LoginRequiredMixin, ListView):
         return context
 
 
+class ResidentDuesListView(LoginRequiredMixin, ListView):
+    model = ApartmentDues
+    template_name = 'payments/resident_dues_list.html'
+    context_object_name = 'dues_list'
+    paginate_by = 20
+    
+    def get_queryset(self):
+        user_apartments = Apartment.objects.filter(
+            Q(resident=self.request.user) | Q(owner=self.request.user)
+        )
+        
+        return ApartmentDues.objects.filter(
+            apartment__in=user_apartments
+        ).select_related('dues', 'apartment').order_by('-dues__year', '-dues__month')
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        
+        user_apartments = Apartment.objects.filter(
+            Q(resident=self.request.user) | Q(owner=self.request.user)
+        )
+        
+        # Summary statistics
+        all_dues = ApartmentDues.objects.filter(apartment__in=user_apartments)
+        context['total_dues'] = all_dues.count()
+        context['paid_dues'] = all_dues.filter(is_paid=True).count()
+        context['unpaid_dues'] = all_dues.filter(is_paid=False).count()
+        context['total_amount_paid'] = all_dues.filter(is_paid=True).aggregate(
+            total=Sum(F('amount') + F('late_fee'))
+        )['total'] or 0
+        context['total_amount_unpaid'] = all_dues.filter(is_paid=False).aggregate(
+            total=Sum(F('amount') + F('late_fee'))
+        )['total'] or 0
+        
+        return context
+
+
+class PayDuesView(LoginRequiredMixin, TemplateView):
+    template_name = 'payments/pay_dues.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        
+        # Get the specific apartment dues
+        apartment_dues = get_object_or_404(
+            ApartmentDues, 
+            pk=self.kwargs['pk'],
+            apartment__in=Apartment.objects.filter(
+                Q(resident=self.request.user) | Q(owner=self.request.user)
+            )
+        )
+        
+        context['apartment_dues'] = apartment_dues
+        return context
+    
+    def post(self, request, *args, **kwargs):
+        apartment_dues = get_object_or_404(
+            ApartmentDues, 
+            pk=self.kwargs['pk'],
+            apartment__in=Apartment.objects.filter(
+                Q(resident=request.user) | Q(owner=request.user)
+            )
+        )
+        
+        if apartment_dues.is_paid:
+            messages.warning(request, 'Bu aidat zaten ödenmiş.')
+            return redirect('payments:resident_dues_list')
+        
+        # Create payment record
+        payment = Payment.objects.create(
+            apartment_dues=apartment_dues,
+            amount=apartment_dues.amount + apartment_dues.late_fee,
+            payment_method='online',
+            payment_date=timezone.now(),
+            created_by=request.user,
+            description=f'{apartment_dues.dues.month}/{apartment_dues.dues.year} ayı aidatı'
+        )
+        
+        # Mark as paid
+        apartment_dues.is_paid = True
+        apartment_dues.paid_date = timezone.now()
+        apartment_dues.save()
+        
+        # Send notification
+        create_notification(
+            user=request.user,
+            title='Ödeme Onayı',
+            message=f'{apartment_dues.apartment} için {apartment_dues.dues.month}/{apartment_dues.dues.year} ayı aidatı başarıyla ödendi.',
+            notification_type='success',
+            apartment=apartment_dues.apartment
+        )
+        
+        messages.success(request, 'Ödemeniz başarıyla tamamlandı.')
+        return redirect('payments:resident_dues_list')
+
+
+class FinancialReportView(AdminRequiredMixin, TemplateView):
+    template_name = 'payments/financial_reports.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        
+        # Get user's buildings
+        user_buildings = Building.objects.filter(admin=self.request.user)
+        
+        # Get date range from request
+        from_date = self.request.GET.get('from_date')
+        to_date = self.request.GET.get('to_date')
+        building_id = self.request.GET.get('building_id')
+        
+        # Set default date range (last 12 months)
+        if not from_date:
+            from_date = (timezone.now() - relativedelta(months=12)).strftime('%Y-%m-%d')
+        if not to_date:
+            to_date = timezone.now().strftime('%Y-%m-%d')
+        
+        context['from_date'] = from_date
+        context['to_date'] = to_date
+        context['buildings'] = user_buildings
+        context['selected_building'] = building_id
+        
+        # Filter data based on parameters
+        dues_filter = Q(building__admin=self.request.user)
+        expenses_filter = Q(building__admin=self.request.user)
+        payments_filter = Q(apartment_dues__apartment__building__admin=self.request.user)
+        
+        if building_id:
+            dues_filter &= Q(building_id=building_id)
+            expenses_filter &= Q(building_id=building_id)
+            payments_filter &= Q(apartment_dues__apartment__building_id=building_id)
+        
+        # Dues data
+        dues_data = Dues.objects.filter(dues_filter).aggregate(
+            total_expected=Sum('amount'),
+            count=Count('id')
+        )
+        
+        # Expenses data
+        expenses_data = Expense.objects.filter(expenses_filter).filter(
+            expense_date__range=[from_date, to_date]
+        ).aggregate(
+            total_expenses=Sum('amount'),
+            count=Count('id')
+        )
+        
+        # Payments data
+        payments_data = Payment.objects.filter(payments_filter).filter(
+            payment_date__range=[from_date, to_date]
+        ).aggregate(
+            total_collected=Sum('amount'),
+            count=Count('id')
+        )
+        
+        # Monthly breakdown
+        monthly_data = []
+        current_date = timezone.datetime.strptime(from_date, '%Y-%m-%d').date()
+        end_date = timezone.datetime.strptime(to_date, '%Y-%m-%d').date()
+        
+        while current_date <= end_date:
+            month_payments = Payment.objects.filter(payments_filter).filter(
+                payment_date__year=current_date.year,
+                payment_date__month=current_date.month
+            ).aggregate(total=Sum('amount'))['total'] or 0
+            
+            month_expenses = Expense.objects.filter(expenses_filter).filter(
+                expense_date__year=current_date.year,
+                expense_date__month=current_date.month
+            ).aggregate(total=Sum('amount'))['total'] or 0
+            
+            monthly_data.append({
+                'month': current_date.strftime('%Y-%m'),
+                'month_name': current_date.strftime('%B %Y'),
+                'payments': month_payments,
+                'expenses': month_expenses,
+                'net': month_payments - month_expenses
+            })
+            
+            current_date = current_date + relativedelta(months=1)
+        
+        context.update({
+            'dues_data': dues_data,
+            'expenses_data': expenses_data,
+            'payments_data': payments_data,
+            'monthly_data': monthly_data,
+            'net_income': (payments_data['total_collected'] or 0) - (expenses_data['total_expenses'] or 0)
+        })
+        
+        return context
+
+
 class SendPaymentReminderView(AdminRequiredMixin, TemplateView):
     """Send payment reminders to residents with unpaid dues"""
     template_name = 'payments/send_reminders.html'
@@ -369,4 +649,16 @@ class SendPaymentReminderView(AdminRequiredMixin, TemplateView):
             Aidat tutarı: {apartment_due.amount}₺
             Gecikme ücreti: {apartment_due.late_fee}₺
             Toplam: {apartment_due.amount + apartment_due.late_fee}₺
+            
+            Lütfen ödemenizi derhal yapınız. Aksi takdirde yasal işlem başlatılacaktır.
+            """
+        
+        # Send notification
+        create_notification(
+            user=resident,
+            title=title,
+            message=message,
+            notification_type='warning' if reminder_type == 'urgent' else 'info',
+            apartment=apartment_due.apartment
+        )
            

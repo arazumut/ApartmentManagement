@@ -3,7 +3,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.filters import SearchFilter, OrderingFilter
-from django_filters.rest_framework import DjangoFilterFilter
+from django_filters.rest_framework import DjangoFilterBackend
 from django.db.models import Q, Count, Avg
 from django.utils import timezone
 from django.shortcuts import get_object_or_404
@@ -41,7 +41,7 @@ class AnnouncementTemplateViewSet(viewsets.ModelViewSet):
     queryset = AnnouncementTemplate.objects.filter(is_active=True)
     serializer_class = AnnouncementTemplateSerializer
     permission_classes = [IsAuthenticated, IsAdminOrReadOnly]
-    filter_backends = [SearchFilter, OrderingFilter, DjangoFilterFilter]
+    filter_backends = [SearchFilter, OrderingFilter, DjangoFilterBackend]
     search_fields = ['name', 'title_template', 'content_template']
     ordering_fields = ['name', 'created_at']
     ordering = ['name']
@@ -52,7 +52,7 @@ class AnnouncementViewSet(viewsets.ModelViewSet):
     """ViewSet for announcements"""
     
     permission_classes = [IsAuthenticated, AnnouncementPermission]
-    filter_backends = [SearchFilter, OrderingFilter, DjangoFilterFilter]
+    filter_backends = [SearchFilter, OrderingFilter, DjangoFilterBackend]
     search_fields = ['title', 'content', 'short_description']
     ordering_fields = ['created_at', 'updated_at', 'publish_at', 'view_count', 'read_count']
     ordering = ['-is_pinned', '-publish_at']
