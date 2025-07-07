@@ -27,8 +27,8 @@ class PackageViewSet(viewsets.ModelViewSet):
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     filterset_fields = ['status', 'building', 'apartment']
     search_fields = ['tracking_number', 'sender', 'description']
-    ordering_fields = ['created_at', 'received_at', 'delivered_at']
-    ordering = ['-created_at']
+    ordering_fields = ['received_at', 'delivered_at']
+    ordering = ['-received_at']
 
     def get_serializer_class(self):
         if self.action == 'create':

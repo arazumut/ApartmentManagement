@@ -1,8 +1,11 @@
-from django.urls import path
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+from .api_views import BuildingViewSet, ApartmentViewSet
 
-# Buildings API URLs
-# TODO: Add API views for buildings management
+router = DefaultRouter()
+router.register(r'buildings', BuildingViewSet)
+router.register(r'apartments', ApartmentViewSet)
 
 urlpatterns = [
-    # Placeholder - add actual API endpoints when needed
+    path('', include(router.urls)),
 ]

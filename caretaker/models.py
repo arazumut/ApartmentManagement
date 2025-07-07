@@ -49,7 +49,6 @@ class Task(models.Model):
     completion_notes = models.TextField(_('completion notes'), blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    updated_at = models.DateTimeField(auto_now=True)
     completed_at = models.DateTimeField(_('completed at'), blank=True, null=True)
     
     def __str__(self):

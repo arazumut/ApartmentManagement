@@ -11,7 +11,7 @@ api_v1_patterns = [
     path('users/', include('users.api_urls')),
     
     # Building management
-    path('buildings/', include('buildings.api_urls')),
+    path('', include('buildings.api_urls')),
     
     # Payment management
     path('payments/', include('payments.api_urls')),

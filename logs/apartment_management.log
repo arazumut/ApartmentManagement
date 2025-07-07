@@ -82,3 +82,796 @@ INFO 2025-07-07 17:46:00,443 autoreload 86692 8599723776 /Users/umutaraz/Desktop
 INFO 2025-07-07 17:46:01,353 autoreload 87480 8599723776 Watching for file changes with StatReloader
 INFO 2025-07-07 17:47:05,745 autoreload 87480 8599723776 /Users/umutaraz/Desktop/Tüm Projelerim/ApartmentManagement/apartment_project/settings.py changed, reloading.
 INFO 2025-07-07 17:47:06,543 autoreload 88078 8599723776 Watching for file changes with StatReloader
+INFO 2025-07-07 17:54:36,158 autoreload 93018 8599723776 Watching for file changes with StatReloader
+WARNING 2025-07-07 17:54:49,539 log 93018 6156611584 Not Found: /api/products/
+WARNING 2025-07-07 17:54:49,539 basehttp 93018 6156611584 "GET /api/products/ HTTP/1.1" 404 6673
+WARNING 2025-07-07 17:54:53,302 log 93018 6156611584 Not Found: /api/
+WARNING 2025-07-07 17:54:53,303 basehttp 93018 6156611584 "GET /api/ HTTP/1.1" 404 6646
+WARNING 2025-07-07 17:54:53,731 log 93018 6156611584 Not Found: /api/
+WARNING 2025-07-07 17:54:53,732 basehttp 93018 6156611584 "GET /api/ HTTP/1.1" 404 6646
+INFO 2025-07-07 17:55:09,793 basehttp 93018 6173437952 "GET /api/docs HTTP/1.1" 301 0
+INFO 2025-07-07 17:55:09,799 basehttp 93018 6190264320 "GET /api/docs/ HTTP/1.1" 200 4657
+ERROR 2025-07-07 17:55:13,509 log 93018 6190264320 Internal Server Error: /api/schema/
+Traceback (most recent call last):
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/views.py", line 84, in get
+    return self._get_schema_response(request)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/views.py", line 92, in _get_schema_response
+    data=generator.get_schema(request=request, public=self.serve_public),
+         ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/generators.py", line 285, in get_schema
+    paths=self.parse(request, public),
+          ~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/generators.py", line 256, in parse
+    operation = view.schema.get_operation(
+        path, path_regex, path_prefix, method, self.registry
+    )
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/openapi.py", line 112, in get_operation
+    operation['responses'] = self._get_response_bodies()
+                             ~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/openapi.py", line 1397, in _get_response_bodies
+    return {'200': self._get_response_for_code(response_serializers, '200', direction=direction)}
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/openapi.py", line 1453, in _get_response_for_code
+    component = self.resolve_serializer(serializer, direction)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/openapi.py", line 1648, in resolve_serializer
+    component.schema = self._map_serializer(serializer, direction, bypass_extensions)
+                       ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/openapi.py", line 949, in _map_serializer
+    schema = self._map_basic_serializer(serializer, direction)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/openapi.py", line 1048, in _map_basic_serializer
+    schema = self._map_serializer_field(field, direction)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/openapi.py", line 684, in _map_serializer_field
+    component = self.resolve_serializer(field, direction)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/openapi.py", line 1648, in resolve_serializer
+    component.schema = self._map_serializer(serializer, direction, bypass_extensions)
+                       ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/openapi.py", line 949, in _map_serializer
+    schema = self._map_basic_serializer(serializer, direction)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/openapi.py", line 1042, in _map_basic_serializer
+    for field in serializer.fields.values():
+                 ^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/utils/functional.py", line 47, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+                                         ~~~~~~~~~^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/rest_framework/serializers.py", line 356, in fields
+    for key, value in self.get_fields().items():
+                      ~~~~~~~~~~~~~~~^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/rest_framework/serializers.py", line 1076, in get_fields
+    field_class, field_kwargs = self.build_field(
+                                ~~~~~~~~~~~~~~~~^
+        source, info, model, depth
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/rest_framework/serializers.py", line 1222, in build_field
+    return self.build_unknown_field(field_name, model_class)
+           ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/rest_framework/serializers.py", line 1340, in build_unknown_field
+    raise ImproperlyConfigured(
+    ...<2 lines>...
+    )
+django.core.exceptions.ImproperlyConfigured: Field name `description` is not valid for model `Building`.
+ERROR 2025-07-07 17:55:13,512 basehttp 93018 6190264320 "GET /api/schema/ HTTP/1.1" 500 213303
+ERROR 2025-07-07 17:55:13,606 log 93018 6190264320 Internal Server Error: /api/schema/
+Traceback (most recent call last):
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/views.py", line 84, in get
+    return self._get_schema_response(request)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/views.py", line 92, in _get_schema_response
+    data=generator.get_schema(request=request, public=self.serve_public),
+         ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/generators.py", line 285, in get_schema
+    paths=self.parse(request, public),
+          ~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/generators.py", line 256, in parse
+    operation = view.schema.get_operation(
+        path, path_regex, path_prefix, method, self.registry
+    )
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/openapi.py", line 112, in get_operation
+    operation['responses'] = self._get_response_bodies()
+                             ~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/openapi.py", line 1397, in _get_response_bodies
+    return {'200': self._get_response_for_code(response_serializers, '200', direction=direction)}
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/openapi.py", line 1453, in _get_response_for_code
+    component = self.resolve_serializer(serializer, direction)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/openapi.py", line 1648, in resolve_serializer
+    component.schema = self._map_serializer(serializer, direction, bypass_extensions)
+                       ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/openapi.py", line 949, in _map_serializer
+    schema = self._map_basic_serializer(serializer, direction)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/openapi.py", line 1048, in _map_basic_serializer
+    schema = self._map_serializer_field(field, direction)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/openapi.py", line 684, in _map_serializer_field
+    component = self.resolve_serializer(field, direction)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/openapi.py", line 1648, in resolve_serializer
+    component.schema = self._map_serializer(serializer, direction, bypass_extensions)
+                       ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/openapi.py", line 949, in _map_serializer
+    schema = self._map_basic_serializer(serializer, direction)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/openapi.py", line 1042, in _map_basic_serializer
+    for field in serializer.fields.values():
+                 ^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/utils/functional.py", line 47, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+                                         ~~~~~~~~~^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/rest_framework/serializers.py", line 356, in fields
+    for key, value in self.get_fields().items():
+                      ~~~~~~~~~~~~~~~^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/rest_framework/serializers.py", line 1076, in get_fields
+    field_class, field_kwargs = self.build_field(
+                                ~~~~~~~~~~~~~~~~^
+        source, info, model, depth
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/rest_framework/serializers.py", line 1222, in build_field
+    return self.build_unknown_field(field_name, model_class)
+           ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/rest_framework/serializers.py", line 1340, in build_unknown_field
+    raise ImproperlyConfigured(
+    ...<2 lines>...
+    )
+django.core.exceptions.ImproperlyConfigured: Field name `description` is not valid for model `Building`.
+ERROR 2025-07-07 17:55:13,608 basehttp 93018 6190264320 "GET /api/schema/ HTTP/1.1" 500 213303
+ERROR 2025-07-07 17:55:27,091 log 93018 6156611584 Internal Server Error: /api/schema/
+Traceback (most recent call last):
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/views.py", line 84, in get
+    return self._get_schema_response(request)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/views.py", line 92, in _get_schema_response
+    data=generator.get_schema(request=request, public=self.serve_public),
+         ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/generators.py", line 285, in get_schema
+    paths=self.parse(request, public),
+          ~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/generators.py", line 256, in parse
+    operation = view.schema.get_operation(
+        path, path_regex, path_prefix, method, self.registry
+    )
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/openapi.py", line 112, in get_operation
+    operation['responses'] = self._get_response_bodies()
+                             ~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/openapi.py", line 1397, in _get_response_bodies
+    return {'200': self._get_response_for_code(response_serializers, '200', direction=direction)}
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/openapi.py", line 1453, in _get_response_for_code
+    component = self.resolve_serializer(serializer, direction)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/openapi.py", line 1648, in resolve_serializer
+    component.schema = self._map_serializer(serializer, direction, bypass_extensions)
+                       ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/openapi.py", line 949, in _map_serializer
+    schema = self._map_basic_serializer(serializer, direction)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/openapi.py", line 1048, in _map_basic_serializer
+    schema = self._map_serializer_field(field, direction)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/openapi.py", line 684, in _map_serializer_field
+    component = self.resolve_serializer(field, direction)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/openapi.py", line 1648, in resolve_serializer
+    component.schema = self._map_serializer(serializer, direction, bypass_extensions)
+                       ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/openapi.py", line 949, in _map_serializer
+    schema = self._map_basic_serializer(serializer, direction)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/openapi.py", line 1042, in _map_basic_serializer
+    for field in serializer.fields.values():
+                 ^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/utils/functional.py", line 47, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+                                         ~~~~~~~~~^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/rest_framework/serializers.py", line 356, in fields
+    for key, value in self.get_fields().items():
+                      ~~~~~~~~~~~~~~~^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/rest_framework/serializers.py", line 1076, in get_fields
+    field_class, field_kwargs = self.build_field(
+                                ~~~~~~~~~~~~~~~~^
+        source, info, model, depth
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/rest_framework/serializers.py", line 1222, in build_field
+    return self.build_unknown_field(field_name, model_class)
+           ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/rest_framework/serializers.py", line 1340, in build_unknown_field
+    raise ImproperlyConfigured(
+    ...<2 lines>...
+    )
+django.core.exceptions.ImproperlyConfigured: Field name `description` is not valid for model `Building`.
+ERROR 2025-07-07 17:55:27,093 basehttp 93018 6156611584 "GET /api/schema/ HTTP/1.1" 500 213811
+ERROR 2025-07-07 17:55:27,561 log 93018 6156611584 Internal Server Error: /api/schema/
+Traceback (most recent call last):
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/views.py", line 84, in get
+    return self._get_schema_response(request)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/views.py", line 92, in _get_schema_response
+    data=generator.get_schema(request=request, public=self.serve_public),
+         ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/generators.py", line 285, in get_schema
+    paths=self.parse(request, public),
+          ~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/generators.py", line 256, in parse
+    operation = view.schema.get_operation(
+        path, path_regex, path_prefix, method, self.registry
+    )
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/openapi.py", line 112, in get_operation
+    operation['responses'] = self._get_response_bodies()
+                             ~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/openapi.py", line 1397, in _get_response_bodies
+    return {'200': self._get_response_for_code(response_serializers, '200', direction=direction)}
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/openapi.py", line 1453, in _get_response_for_code
+    component = self.resolve_serializer(serializer, direction)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/openapi.py", line 1648, in resolve_serializer
+    component.schema = self._map_serializer(serializer, direction, bypass_extensions)
+                       ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/openapi.py", line 949, in _map_serializer
+    schema = self._map_basic_serializer(serializer, direction)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/openapi.py", line 1048, in _map_basic_serializer
+    schema = self._map_serializer_field(field, direction)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/openapi.py", line 684, in _map_serializer_field
+    component = self.resolve_serializer(field, direction)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/openapi.py", line 1648, in resolve_serializer
+    component.schema = self._map_serializer(serializer, direction, bypass_extensions)
+                       ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/openapi.py", line 949, in _map_serializer
+    schema = self._map_basic_serializer(serializer, direction)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/openapi.py", line 1042, in _map_basic_serializer
+    for field in serializer.fields.values():
+                 ^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/utils/functional.py", line 47, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+                                         ~~~~~~~~~^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/rest_framework/serializers.py", line 356, in fields
+    for key, value in self.get_fields().items():
+                      ~~~~~~~~~~~~~~~^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/rest_framework/serializers.py", line 1076, in get_fields
+    field_class, field_kwargs = self.build_field(
+                                ~~~~~~~~~~~~~~~~^
+        source, info, model, depth
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/rest_framework/serializers.py", line 1222, in build_field
+    return self.build_unknown_field(field_name, model_class)
+           ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/rest_framework/serializers.py", line 1340, in build_unknown_field
+    raise ImproperlyConfigured(
+    ...<2 lines>...
+    )
+django.core.exceptions.ImproperlyConfigured: Field name `description` is not valid for model `Building`.
+ERROR 2025-07-07 17:55:27,563 basehttp 93018 6156611584 "GET /api/schema/ HTTP/1.1" 500 213537
+INFO 2025-07-07 17:56:11,814 autoreload 93018 8599723776 /Users/umutaraz/Desktop/Tüm Projelerim/ApartmentManagement/buildings/serializers.py changed, reloading.
+INFO 2025-07-07 17:56:12,683 autoreload 93827 8599723776 Watching for file changes with StatReloader
+ERROR 2025-07-07 17:56:15,877 log 93827 6170652672 Internal Server Error: /api/schema/
+Traceback (most recent call last):
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/views.py", line 84, in get
+    return self._get_schema_response(request)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/views.py", line 92, in _get_schema_response
+    data=generator.get_schema(request=request, public=self.serve_public),
+         ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/generators.py", line 285, in get_schema
+    paths=self.parse(request, public),
+          ~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/generators.py", line 256, in parse
+    operation = view.schema.get_operation(
+        path, path_regex, path_prefix, method, self.registry
+    )
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/utils.py", line 451, in get_operation
+    return super().get_operation(path, path_regex, path_prefix, method, registry)
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/openapi.py", line 112, in get_operation
+    operation['responses'] = self._get_response_bodies()
+                             ~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/openapi.py", line 1397, in _get_response_bodies
+    return {'200': self._get_response_for_code(response_serializers, '200', direction=direction)}
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/openapi.py", line 1453, in _get_response_for_code
+    component = self.resolve_serializer(serializer, direction)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/openapi.py", line 1648, in resolve_serializer
+    component.schema = self._map_serializer(serializer, direction, bypass_extensions)
+                       ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/openapi.py", line 949, in _map_serializer
+    schema = self._map_basic_serializer(serializer, direction)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/openapi.py", line 1042, in _map_basic_serializer
+    for field in serializer.fields.values():
+                 ^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/utils/functional.py", line 47, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+                                         ~~~~~~~~~^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/rest_framework/serializers.py", line 356, in fields
+    for key, value in self.get_fields().items():
+                      ~~~~~~~~~~~~~~~^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/rest_framework/serializers.py", line 1076, in get_fields
+    field_class, field_kwargs = self.build_field(
+                                ~~~~~~~~~~~~~~~~^
+        source, info, model, depth
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/rest_framework/serializers.py", line 1222, in build_field
+    return self.build_unknown_field(field_name, model_class)
+           ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/rest_framework/serializers.py", line 1340, in build_unknown_field
+    raise ImproperlyConfigured(
+    ...<2 lines>...
+    )
+django.core.exceptions.ImproperlyConfigured: Field name `created_at` is not valid for model `Package`.
+ERROR 2025-07-07 17:56:15,881 basehttp 93827 6170652672 "GET /api/schema/ HTTP/1.1" 500 192403
+ERROR 2025-07-07 17:56:27,095 log 93827 6187479040 Internal Server Error: /api/schema/
+Traceback (most recent call last):
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/views.py", line 84, in get
+    return self._get_schema_response(request)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/views.py", line 92, in _get_schema_response
+    data=generator.get_schema(request=request, public=self.serve_public),
+         ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/generators.py", line 285, in get_schema
+    paths=self.parse(request, public),
+          ~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/generators.py", line 256, in parse
+    operation = view.schema.get_operation(
+        path, path_regex, path_prefix, method, self.registry
+    )
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/utils.py", line 451, in get_operation
+    return super().get_operation(path, path_regex, path_prefix, method, registry)
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/openapi.py", line 112, in get_operation
+    operation['responses'] = self._get_response_bodies()
+                             ~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/openapi.py", line 1397, in _get_response_bodies
+    return {'200': self._get_response_for_code(response_serializers, '200', direction=direction)}
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/openapi.py", line 1453, in _get_response_for_code
+    component = self.resolve_serializer(serializer, direction)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/openapi.py", line 1648, in resolve_serializer
+    component.schema = self._map_serializer(serializer, direction, bypass_extensions)
+                       ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/openapi.py", line 949, in _map_serializer
+    schema = self._map_basic_serializer(serializer, direction)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/openapi.py", line 1042, in _map_basic_serializer
+    for field in serializer.fields.values():
+                 ^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/utils/functional.py", line 47, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+                                         ~~~~~~~~~^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/rest_framework/serializers.py", line 356, in fields
+    for key, value in self.get_fields().items():
+                      ~~~~~~~~~~~~~~~^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/rest_framework/serializers.py", line 1076, in get_fields
+    field_class, field_kwargs = self.build_field(
+                                ~~~~~~~~~~~~~~~~^
+        source, info, model, depth
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/rest_framework/serializers.py", line 1222, in build_field
+    return self.build_unknown_field(field_name, model_class)
+           ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/rest_framework/serializers.py", line 1340, in build_unknown_field
+    raise ImproperlyConfigured(
+    ...<2 lines>...
+    )
+django.core.exceptions.ImproperlyConfigured: Field name `created_at` is not valid for model `Package`.
+ERROR 2025-07-07 17:56:27,097 basehttp 93827 6187479040 "GET /api/schema/ HTTP/1.1" 500 192403
+ERROR 2025-07-07 17:57:07,043 log 93827 6170652672 Internal Server Error: /api/schema/
+Traceback (most recent call last):
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/views.py", line 84, in get
+    return self._get_schema_response(request)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/views.py", line 92, in _get_schema_response
+    data=generator.get_schema(request=request, public=self.serve_public),
+         ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/generators.py", line 285, in get_schema
+    paths=self.parse(request, public),
+          ~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/generators.py", line 256, in parse
+    operation = view.schema.get_operation(
+        path, path_regex, path_prefix, method, self.registry
+    )
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/utils.py", line 451, in get_operation
+    return super().get_operation(path, path_regex, path_prefix, method, registry)
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/openapi.py", line 112, in get_operation
+    operation['responses'] = self._get_response_bodies()
+                             ~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/openapi.py", line 1397, in _get_response_bodies
+    return {'200': self._get_response_for_code(response_serializers, '200', direction=direction)}
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/openapi.py", line 1453, in _get_response_for_code
+    component = self.resolve_serializer(serializer, direction)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/openapi.py", line 1648, in resolve_serializer
+    component.schema = self._map_serializer(serializer, direction, bypass_extensions)
+                       ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/openapi.py", line 949, in _map_serializer
+    schema = self._map_basic_serializer(serializer, direction)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/openapi.py", line 1042, in _map_basic_serializer
+    for field in serializer.fields.values():
+                 ^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/utils/functional.py", line 47, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+                                         ~~~~~~~~~^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/rest_framework/serializers.py", line 356, in fields
+    for key, value in self.get_fields().items():
+                      ~~~~~~~~~~~~~~~^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/rest_framework/serializers.py", line 1076, in get_fields
+    field_class, field_kwargs = self.build_field(
+                                ~~~~~~~~~~~~~~~~^
+        source, info, model, depth
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/rest_framework/serializers.py", line 1222, in build_field
+    return self.build_unknown_field(field_name, model_class)
+           ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/rest_framework/serializers.py", line 1340, in build_unknown_field
+    raise ImproperlyConfigured(
+    ...<2 lines>...
+    )
+django.core.exceptions.ImproperlyConfigured: Field name `created_at` is not valid for model `Package`.
+ERROR 2025-07-07 17:57:07,045 basehttp 93827 6170652672 "GET /api/schema/ HTTP/1.1" 500 192403
+ERROR 2025-07-07 17:57:13,831 log 93827 6204305408 Internal Server Error: /api/schema/
+Traceback (most recent call last):
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/views.py", line 84, in get
+    return self._get_schema_response(request)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/views.py", line 92, in _get_schema_response
+    data=generator.get_schema(request=request, public=self.serve_public),
+         ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/generators.py", line 285, in get_schema
+    paths=self.parse(request, public),
+          ~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/generators.py", line 256, in parse
+    operation = view.schema.get_operation(
+        path, path_regex, path_prefix, method, self.registry
+    )
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/utils.py", line 451, in get_operation
+    return super().get_operation(path, path_regex, path_prefix, method, registry)
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/openapi.py", line 112, in get_operation
+    operation['responses'] = self._get_response_bodies()
+                             ~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/openapi.py", line 1397, in _get_response_bodies
+    return {'200': self._get_response_for_code(response_serializers, '200', direction=direction)}
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/openapi.py", line 1453, in _get_response_for_code
+    component = self.resolve_serializer(serializer, direction)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/openapi.py", line 1648, in resolve_serializer
+    component.schema = self._map_serializer(serializer, direction, bypass_extensions)
+                       ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/openapi.py", line 949, in _map_serializer
+    schema = self._map_basic_serializer(serializer, direction)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/openapi.py", line 1042, in _map_basic_serializer
+    for field in serializer.fields.values():
+                 ^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/utils/functional.py", line 47, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+                                         ~~~~~~~~~^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/rest_framework/serializers.py", line 356, in fields
+    for key, value in self.get_fields().items():
+                      ~~~~~~~~~~~~~~~^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/rest_framework/serializers.py", line 1076, in get_fields
+    field_class, field_kwargs = self.build_field(
+                                ~~~~~~~~~~~~~~~~^
+        source, info, model, depth
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/rest_framework/serializers.py", line 1222, in build_field
+    return self.build_unknown_field(field_name, model_class)
+           ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/rest_framework/serializers.py", line 1340, in build_unknown_field
+    raise ImproperlyConfigured(
+    ...<2 lines>...
+    )
+django.core.exceptions.ImproperlyConfigured: Field name `created_at` is not valid for model `Package`.
+ERROR 2025-07-07 17:57:13,833 basehttp 93827 6204305408 "GET /api/schema/ HTTP/1.1" 500 192403
+INFO 2025-07-07 17:57:23,744 autoreload 93827 8599723776 /Users/umutaraz/Desktop/Tüm Projelerim/ApartmentManagement/buildings/api_urls.py changed, reloading.
+INFO 2025-07-07 17:57:24,666 autoreload 94448 8599723776 Watching for file changes with StatReloader
+ERROR 2025-07-07 17:57:49,651 log 94448 6156840960 Internal Server Error: /api/schema/
+Traceback (most recent call last):
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/views.py", line 84, in get
+    return self._get_schema_response(request)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/views.py", line 92, in _get_schema_response
+    data=generator.get_schema(request=request, public=self.serve_public),
+         ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/generators.py", line 285, in get_schema
+    paths=self.parse(request, public),
+          ~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/generators.py", line 256, in parse
+    operation = view.schema.get_operation(
+        path, path_regex, path_prefix, method, self.registry
+    )
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/utils.py", line 451, in get_operation
+    return super().get_operation(path, path_regex, path_prefix, method, registry)
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/openapi.py", line 112, in get_operation
+    operation['responses'] = self._get_response_bodies()
+                             ~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/openapi.py", line 1397, in _get_response_bodies
+    return {'200': self._get_response_for_code(response_serializers, '200', direction=direction)}
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/openapi.py", line 1453, in _get_response_for_code
+    component = self.resolve_serializer(serializer, direction)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/openapi.py", line 1648, in resolve_serializer
+    component.schema = self._map_serializer(serializer, direction, bypass_extensions)
+                       ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/openapi.py", line 949, in _map_serializer
+    schema = self._map_basic_serializer(serializer, direction)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/openapi.py", line 1042, in _map_basic_serializer
+    for field in serializer.fields.values():
+                 ^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/utils/functional.py", line 47, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+                                         ~~~~~~~~~^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/rest_framework/serializers.py", line 356, in fields
+    for key, value in self.get_fields().items():
+                      ~~~~~~~~~~~~~~~^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/rest_framework/serializers.py", line 1076, in get_fields
+    field_class, field_kwargs = self.build_field(
+                                ~~~~~~~~~~~~~~~~^
+        source, info, model, depth
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/rest_framework/serializers.py", line 1222, in build_field
+    return self.build_unknown_field(field_name, model_class)
+           ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/rest_framework/serializers.py", line 1340, in build_unknown_field
+    raise ImproperlyConfigured(
+    ...<2 lines>...
+    )
+django.core.exceptions.ImproperlyConfigured: Field name `created_at` is not valid for model `Package`.
+ERROR 2025-07-07 17:57:49,653 basehttp 94448 6156840960 "GET /api/schema/ HTTP/1.1" 500 191735
+INFO 2025-07-07 17:57:49,766 autoreload 94448 8599723776 /Users/umutaraz/Desktop/Tüm Projelerim/ApartmentManagement/apartment_project/api_urls.py changed, reloading.
+INFO 2025-07-07 17:57:50,408 autoreload 94658 8599723776 Watching for file changes with StatReloader
+INFO 2025-07-07 17:58:18,684 autoreload 94658 8599723776 /Users/umutaraz/Desktop/Tüm Projelerim/ApartmentManagement/buildings/api_views.py changed, reloading.
+INFO 2025-07-07 17:58:19,340 autoreload 94888 8599723776 Watching for file changes with StatReloader
+INFO 2025-07-07 17:58:21,867 autoreload 95111 8599723776 Watching for file changes with StatReloader
+ERROR 2025-07-07 17:58:50,832 log 94888 6128578560 Internal Server Error: /api/schema/
+Traceback (most recent call last):
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/views.py", line 84, in get
+    return self._get_schema_response(request)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/views.py", line 92, in _get_schema_response
+    data=generator.get_schema(request=request, public=self.serve_public),
+         ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/generators.py", line 285, in get_schema
+    paths=self.parse(request, public),
+          ~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/generators.py", line 256, in parse
+    operation = view.schema.get_operation(
+        path, path_regex, path_prefix, method, self.registry
+    )
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/utils.py", line 451, in get_operation
+    return super().get_operation(path, path_regex, path_prefix, method, registry)
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/openapi.py", line 112, in get_operation
+    operation['responses'] = self._get_response_bodies()
+                             ~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/openapi.py", line 1397, in _get_response_bodies
+    return {'200': self._get_response_for_code(response_serializers, '200', direction=direction)}
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/openapi.py", line 1453, in _get_response_for_code
+    component = self.resolve_serializer(serializer, direction)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/openapi.py", line 1648, in resolve_serializer
+    component.schema = self._map_serializer(serializer, direction, bypass_extensions)
+                       ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/openapi.py", line 949, in _map_serializer
+    schema = self._map_basic_serializer(serializer, direction)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/drf_spectacular/openapi.py", line 1042, in _map_basic_serializer
+    for field in serializer.fields.values():
+                 ^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/django/utils/functional.py", line 47, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+                                         ~~~~~~~~~^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/rest_framework/serializers.py", line 356, in fields
+    for key, value in self.get_fields().items():
+                      ~~~~~~~~~~~~~~~^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/rest_framework/serializers.py", line 1076, in get_fields
+    field_class, field_kwargs = self.build_field(
+                                ~~~~~~~~~~~~~~~~^
+        source, info, model, depth
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/rest_framework/serializers.py", line 1222, in build_field
+    return self.build_unknown_field(field_name, model_class)
+           ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/rest_framework/serializers.py", line 1340, in build_unknown_field
+    raise ImproperlyConfigured(
+    ...<2 lines>...
+    )
+django.core.exceptions.ImproperlyConfigured: Field name `created_at` is not valid for model `Package`.
+ERROR 2025-07-07 17:58:50,836 basehttp 94888 6128578560 "GET /api/schema/ HTTP/1.1" 500 192432
+INFO 2025-07-07 17:59:27,447 autoreload 94888 8599723776 /Users/umutaraz/Desktop/Tüm Projelerim/ApartmentManagement/packages/serializers.py changed, reloading.
+INFO 2025-07-07 17:59:28,278 autoreload 95732 8599723776 Watching for file changes with StatReloader
+INFO 2025-07-07 17:59:55,398 autoreload 95732 8599723776 /Users/umutaraz/Desktop/Tüm Projelerim/ApartmentManagement/caretaker/models.py changed, reloading.
+INFO 2025-07-07 17:59:56,040 autoreload 95973 8599723776 Watching for file changes with StatReloader
+INFO 2025-07-07 18:00:01,659 basehttp 95973 6159052800 "GET /api/schema/ HTTP/1.1" 200 158686
+INFO 2025-07-07 18:00:12,086 autoreload 95973 8599723776 /Users/umutaraz/Desktop/Tüm Projelerim/ApartmentManagement/packages/serializers.py changed, reloading.
+INFO 2025-07-07 18:00:12,764 autoreload 96124 8599723776 Watching for file changes with StatReloader
+INFO 2025-07-07 18:01:26,491 autoreload 96124 8599723776 /Users/umutaraz/Desktop/Tüm Projelerim/ApartmentManagement/packages/api_views.py changed, reloading.
+INFO 2025-07-07 18:01:27,443 autoreload 97015 8599723776 Watching for file changes with StatReloader
+INFO 2025-07-07 18:02:03,985 autoreload 97015 8599723776 /Users/umutaraz/Desktop/Tüm Projelerim/ApartmentManagement/packages/api_views.py changed, reloading.
+INFO 2025-07-07 18:02:04,807 autoreload 97348 8599723776 Watching for file changes with StatReloader
