@@ -56,3 +56,22 @@ Traceback (most recent call last):
     )
 django.core.exceptions.FieldError: Unsupported lookup 'apartment_count' for BigAutoField or join on the field not permitted.
 ERROR 2025-07-07 16:23:20,711 basehttp 44813 6163214336 "GET / HTTP/1.1" 500 126807
+INFO 2025-07-07 17:18:01,588 autoreload 71463 8599723776 Watching for file changes with StatReloader
+INFO 2025-07-07 17:18:11,923 autoreload 71710 8599723776 Watching for file changes with StatReloader
+INFO 2025-07-07 17:18:14,748 basehttp 71710 6155956224 "GET / HTTP/1.1" 200 22186
+INFO 2025-07-07 17:18:14,848 basehttp 71710 6223261696 "GET /static/images/logo-sm.png HTTP/1.1" 200 3568
+INFO 2025-07-07 17:18:14,850 basehttp 71710 6206435328 "GET /static/images/logo.png HTTP/1.1" 200 5428
+INFO 2025-07-07 17:18:14,851 basehttp 71710 6155956224 "GET /static/css/vendor.min.css HTTP/1.1" 200 37938
+INFO 2025-07-07 17:18:14,856 basehttp 71710 6189608960 "GET /static/css/icons.min.css HTTP/1.1" 200 376013
+INFO 2025-07-07 17:18:14,857 basehttp 71710 6172782592 "GET /static/css/app.min.css HTTP/1.1" 200 440639
+INFO 2025-07-07 17:18:14,868 basehttp 71710 6172782592 "GET /static/images/logo-dark.png HTTP/1.1" 200 5502
+INFO 2025-07-07 17:18:14,875 basehttp 71710 6155956224 "GET /static/js/app.js HTTP/1.1" 200 17575
+WARNING 2025-07-07 17:18:14,877 basehttp 71710 6206435328 "GET /static/images/building.svg HTTP/1.1" 404 1984
+INFO 2025-07-07 17:18:14,884 basehttp 71710 6189608960 "GET /static/js/vendor.min.js HTTP/1.1" 200 534826
+INFO 2025-07-07 17:18:15,037 basehttp 71710 6189608960 "GET /static/images/body-bg-light.jpg HTTP/1.1" 200 163957
+INFO 2025-07-07 17:18:15,128 basehttp 71710 6189608960 "GET /static/fonts/remixicon44dd.woff2?t=1730118419915 HTTP/1.1" 200 174156
+WARNING 2025-07-07 17:18:15,323 log 71710 6189608960 Not Found: /api/badges/
+WARNING 2025-07-07 17:18:15,325 log 71710 6155956224 Not Found: /notifications/ajax/list/
+WARNING 2025-07-07 17:18:15,325 basehttp 71710 6189608960 "GET /api/badges/ HTTP/1.1" 404 5560
+WARNING 2025-07-07 17:18:15,325 basehttp 71710 6155956224 "GET /notifications/ajax/list/ HTTP/1.1" 404 6903
+INFO 2025-07-07 17:18:15,372 basehttp 71710 6189608960 "GET /static/images/favicon.ico HTTP/1.1" 200 109599

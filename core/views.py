@@ -22,8 +22,8 @@ class HomeView(TemplateView):
         context = super().get_context_data(**kwargs)
         context['buildings_count'] = Building.objects.count()
         context['apartments_count'] = Apartment.objects.count()
-        context['residents_count'] = Building.objects.aggregate(
-            total=Sum('apartments__apartment_count')
+        context['residents_count'] = Apartment.objects.aggregate(
+            total=Sum('occupant_count')
         )['total'] or 0
         return context
 
