@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Task, Report
+from .models import Task
 from buildings.serializers import BuildingSerializer
 from users.serializers import UserSerializer
 
@@ -37,26 +37,4 @@ class TaskUpdateSerializer(serializers.ModelSerializer):
         fields = [
             'title', 'description', 'assigned_to', 'status', 'priority',
             'due_date', 'frequency', 'recurrence_end_date', 'completion_notes'
-        ]
-
-
-class ReportSerializer(serializers.ModelSerializer):
-    building = BuildingSerializer(read_only=True)
-    created_by = UserSerializer(read_only=True)
-    building_id = serializers.IntegerField(write_only=True)
-    
-    class Meta:
-        model = Report
-        fields = [
-            'id', 'building', 'title', 'description', 'type', 'images',
-            'created_by', 'created_at', 'updated_at', 'building_id'
-        ]
-        read_only_fields = ['id', 'created_at', 'updated_at', 'created_by']
-
-
-class ReportCreateSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Report
-        fields = [
-            'building', 'title', 'description', 'type', 'images'
         ]

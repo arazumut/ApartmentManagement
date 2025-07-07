@@ -43,3 +43,27 @@ class IsResidentOrAdmin(permissions.BasePermission):
     
     def has_permission(self, request, view):
         return request.user.is_authenticated and (request.user.is_admin or request.user.is_resident)
+
+
+class IsCaretakerOrAdmin(permissions.BasePermission):
+    """
+    Custom permission to allow caretakers and admins.
+    """
+    
+    def has_permission(self, request, view):
+        return request.user.is_authenticated and (
+            request.user.is_admin or request.user.role == request.user.CARETAKER
+        )
+
+
+class IsResidentOwnerOrCaretaker(permissions.BasePermission):
+    """
+    Custom permission to allow residents, owners, and caretakers.
+    """
+    
+    def has_permission(self, request, view):
+        return request.user.is_authenticated and (
+            request.user.is_admin or 
+            request.user.role == request.user.RESIDENT or
+            request.user.role == request.user.CARETAKER
+        )

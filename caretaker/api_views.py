@@ -8,10 +8,9 @@ from django.utils import timezone
 from django.db import models
 from drf_spectacular.utils import extend_schema, extend_schema_view
 
-from .models import Task, Report
+from .models import Task
 from .serializers import (
-    TaskSerializer, TaskCreateSerializer, TaskUpdateSerializer,
-    ReportSerializer, ReportCreateSerializer
+    TaskSerializer, TaskCreateSerializer, TaskUpdateSerializer
 )
 from core.permissions import IsCaretakerOrAdmin
 
@@ -88,54 +87,4 @@ class TaskViewSet(viewsets.ModelViewSet):
         
         tasks = self.get_queryset().filter(building_id=building_id)
         serializer = self.get_serializer(tasks, many=True)
-        return Response(serializer.data)
-
-
-@extend_schema_view(
-    list=extend_schema(description='List all reports'),
-    retrieve=extend_schema(description='Retrieve a specific report'),
-    create=extend_schema(description='Create a new report'),
-    update=extend_schema(description='Update a report'),
-    partial_update=extend_schema(description='Partially update a report'),
-    destroy=extend_schema(description='Delete a report'),
-)
-class ReportViewSet(viewsets.ModelViewSet):
-    queryset = Report.objects.all()
-    serializer_class = ReportSerializer
-    permission_classes = [IsAuthenticated, IsCaretakerOrAdmin]
-    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
-    filterset_fields = ['type', 'building']
-    search_fields = ['title', 'description']
-    ordering_fields = ['created_at']
-    ordering = ['-created_at']
-
-    def get_serializer_class(self):
-        if self.action == 'create':
-            return ReportCreateSerializer
-        return ReportSerializer
-
-    def get_queryset(self):
-        user = self.request.user
-        queryset = Report.objects.all()
-        
-        if user.role == user.CARETAKER:
-            # Caretakers can see reports for buildings they manage
-            queryset = queryset.filter(building__caretaker=user)
-        # Admins can see all reports
-        
-        return queryset
-
-    def perform_create(self, serializer):
-        serializer.save(created_by=self.request.user)
-
-    @extend_schema(description='Get reports by building')
-    @action(detail=False, methods=['get'])
-    def by_building(self, request):
-        building_id = request.query_params.get('building_id')
-        if not building_id:
-            return Response({'error': 'building_id parameter is required'}, 
-                          status=status.HTTP_400_BAD_REQUEST)
-        
-        reports = self.get_queryset().filter(building_id=building_id)
-        serializer = self.get_serializer(reports, many=True)
         return Response(serializer.data)
