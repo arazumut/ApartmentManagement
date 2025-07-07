@@ -39,6 +39,8 @@ class Package(models.Model):
     delivered_at = models.DateTimeField(_('delivered at'), blank=True, null=True)
     delivery_signature = models.ImageField(_('delivery signature'), upload_to='signatures/', blank=True, null=True)
     notes = models.TextField(_('notes'), blank=True, null=True)
+    created_at = models.DateTimeField(_('created at'), default=timezone.now)
+    updated_at = models.DateTimeField(_('updated at'), auto_now=True)
     
     def __str__(self):
         return f"Package for {self.apartment} - {self.get_status_display()}"
@@ -46,7 +48,7 @@ class Package(models.Model):
     class Meta:
         verbose_name = _('Package')
         verbose_name_plural = _('Packages')
-        ordering = ['-received_at']
+        ordering = ['-created_at']
     
     def save(self, *args, **kwargs):
         # Update delivered_at timestamp when status changes to delivered

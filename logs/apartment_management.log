@@ -875,3 +875,8 @@ INFO 2025-07-07 18:01:26,491 autoreload 96124 8599723776 /Users/umutaraz/Desktop
 INFO 2025-07-07 18:01:27,443 autoreload 97015 8599723776 Watching for file changes with StatReloader
 INFO 2025-07-07 18:02:03,985 autoreload 97015 8599723776 /Users/umutaraz/Desktop/Tüm Projelerim/ApartmentManagement/packages/api_views.py changed, reloading.
 INFO 2025-07-07 18:02:04,807 autoreload 97348 8599723776 Watching for file changes with StatReloader
+INFO 2025-07-07 18:11:35,864 autoreload 3152 8599723776 Watching for file changes with StatReloader
+INFO 2025-07-07 18:11:38,558 basehttp 3152 6170898432 "GET /api/schema/ HTTP/1.1" 200 158916
+INFO 2025-07-07 18:12:30,879 basehttp 3152 6170898432 "GET /api/schema/ HTTP/1.1" 200 158916
+INFO 2025-07-07 18:12:54,401 autoreload 3152 8599723776 /Users/umutaraz/Desktop/Tüm Projelerim/ApartmentManagement/packages/models.py changed, reloading.
+INFO 2025-07-07 18:12:55,449 autoreload 4373 8599723776 Watching for file changes with StatReloader

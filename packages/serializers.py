@@ -19,9 +19,9 @@ class PackageSerializer(serializers.ModelSerializer):
             'id', 'building', 'apartment', 'tracking_number', 'sender',
             'description', 'image', 'status', 'received_by', 'received_at',
             'delivered_to', 'delivered_at', 'delivery_signature', 'notes',
-            'building_id', 'apartment_id', 'received_by_id'
+            'created_at', 'updated_at', 'building_id', 'apartment_id', 'received_by_id'
         ]
-        read_only_fields = ['id', 'received_at', 'delivered_at']
+        read_only_fields = ['id', 'received_at', 'delivered_at', 'created_at', 'updated_at']
 
 
 class PackageCreateSerializer(serializers.ModelSerializer):
