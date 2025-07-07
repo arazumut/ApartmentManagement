@@ -75,3 +75,10 @@ WARNING 2025-07-07 17:18:15,325 log 71710 6155956224 Not Found: /notifications/a
 WARNING 2025-07-07 17:18:15,325 basehttp 71710 6189608960 "GET /api/badges/ HTTP/1.1" 404 5560
 WARNING 2025-07-07 17:18:15,325 basehttp 71710 6155956224 "GET /notifications/ajax/list/ HTTP/1.1" 404 6903
 INFO 2025-07-07 17:18:15,372 basehttp 71710 6189608960 "GET /static/images/favicon.ico HTTP/1.1" 200 109599
+INFO 2025-07-07 17:44:20,599 autoreload 86692 8599723776 Watching for file changes with StatReloader
+WARNING 2025-07-07 17:44:34,584 log 86692 6194868224 Not Found: /api/
+WARNING 2025-07-07 17:44:34,585 basehttp 86692 6194868224 "GET /api/ HTTP/1.1" 404 5539
+INFO 2025-07-07 17:46:00,443 autoreload 86692 8599723776 /Users/umutaraz/Desktop/Tüm Projelerim/ApartmentManagement/packages/models.py changed, reloading.
+INFO 2025-07-07 17:46:01,353 autoreload 87480 8599723776 Watching for file changes with StatReloader
+INFO 2025-07-07 17:47:05,745 autoreload 87480 8599723776 /Users/umutaraz/Desktop/Tüm Projelerim/ApartmentManagement/apartment_project/settings.py changed, reloading.
+INFO 2025-07-07 17:47:06,543 autoreload 88078 8599723776 Watching for file changes with StatReloader

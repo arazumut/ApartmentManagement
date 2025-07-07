@@ -42,16 +42,17 @@ urlpatterns = [
     path('packages/', include('packages.urls')),
     path('notifications/', include('notifications.urls')),
     
-    # API URLs
+    # API URLs - All under /api/
+    path('api/', include('apartment_project.api_urls')),
+    
+    # Legacy API endpoints (kept for backward compatibility)
+    # These will be removed in future versions
     path('api/v1/users/', include('users.api_urls')),
     path('api/v1/buildings/', include('buildings.api_urls')),
     path('api/v1/payments/', include('payments.api_urls')),
     path('api/v1/complaints/', include('complaints.api_urls')),
     path('api/v1/announcements/', include('announcements.api_urls')),
     path('api/v1/notifications/', include('notifications.api_urls')),
-    
-    # REST Framework browsable API
-    path('api-auth/', include('rest_framework.urls')),
 ]
 
 # Serve media files in development
