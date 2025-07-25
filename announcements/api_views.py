@@ -36,7 +36,6 @@ class AnnouncementCategoryViewSet(viewsets.ModelViewSet):
 
 
 class AnnouncementTemplateViewSet(viewsets.ModelViewSet):
-    """ViewSet for announcement templates"""
     
     queryset = AnnouncementTemplate.objects.filter(is_active=True)
     serializer_class = AnnouncementTemplateSerializer
@@ -49,7 +48,6 @@ class AnnouncementTemplateViewSet(viewsets.ModelViewSet):
 
 
 class AnnouncementViewSet(viewsets.ModelViewSet):
-    """ViewSet for announcements"""
     
     permission_classes = [IsAuthenticated, AnnouncementPermission]
     filter_backends = [SearchFilter, OrderingFilter, DjangoFilterBackend]
@@ -107,7 +105,6 @@ class AnnouncementViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
     
     def track_view(self, announcement, user):
-        """Track announcement view"""
         from .models import AnnouncementView
         
         # Get client IP
@@ -128,7 +125,6 @@ class AnnouncementViewSet(viewsets.ModelViewSet):
         announcement.increment_view_count()
     
     def get_client_ip(self):
-        """Get client IP address"""
         x_forwarded_for = self.request.META.get('HTTP_X_FORWARDED_FOR')
         if x_forwarded_for:
             ip = x_forwarded_for.split(',')[0]
@@ -138,7 +134,6 @@ class AnnouncementViewSet(viewsets.ModelViewSet):
     
     @action(detail=True, methods=['post'])
     def mark_read(self, request, pk=None):
-        """Mark announcement as read"""
         announcement = self.get_object()
         user = request.user
         
@@ -149,7 +144,6 @@ class AnnouncementViewSet(viewsets.ModelViewSet):
     
     @action(detail=True, methods=['post'])
     def toggle_like(self, request, pk=None):
-        """Toggle like status"""
         announcement = self.get_object()
         user = request.user
         
@@ -171,7 +165,6 @@ class AnnouncementViewSet(viewsets.ModelViewSet):
     
     @action(detail=True, methods=['post'])
     def add_comment(self, request, pk=None):
-        """Add comment to announcement"""
         announcement = self.get_object()
         user = request.user
         
@@ -197,7 +190,6 @@ class AnnouncementViewSet(viewsets.ModelViewSet):
     
     @action(detail=True, methods=['get'])
     def comments(self, request, pk=None):
-        """Get announcement comments"""
         announcement = self.get_object()
         
         if not announcement.allow_comments:
@@ -213,7 +205,6 @@ class AnnouncementViewSet(viewsets.ModelViewSet):
     
     @action(detail=True, methods=['post'])
     def share(self, request, pk=None):
-        """Track announcement share"""
         announcement = self.get_object()
         user = request.user
         platform = request.data.get('platform', 'unknown')
@@ -229,7 +220,6 @@ class AnnouncementViewSet(viewsets.ModelViewSet):
     
     @action(detail=True, methods=['post'])
     def feedback(self, request, pk=None):
-        """Submit feedback for announcement"""
         announcement = self.get_object()
         user = request.user
         
@@ -255,7 +245,6 @@ class AnnouncementViewSet(viewsets.ModelViewSet):
     
     @action(detail=True, methods=['get'])
     def stats(self, request, pk=None):
-        """Get announcement statistics"""
         announcement = self.get_object()
         
         stats = {
@@ -275,7 +264,6 @@ class AnnouncementViewSet(viewsets.ModelViewSet):
     
     @action(detail=False, methods=['post'])
     def quick_action(self, request):
-        """Perform quick actions on announcements"""
         serializer = AnnouncementQuickActionSerializer(data=request.data)
         if serializer.is_valid():
             action_type = serializer.validated_data['action']
@@ -349,7 +337,6 @@ class AnnouncementViewSet(viewsets.ModelViewSet):
     
     @action(detail=False, methods=['get'])
     def my_announcements(self, request):
-        """Get user's building announcements"""
         user = request.user
         
         try:
@@ -401,8 +388,7 @@ class AnnouncementViewSet(viewsets.ModelViewSet):
             return Response([])
     
     @action(detail=False, methods=['get'])
-    def analytics(self, request):
-        """Get announcement analytics"""
+    def analytics(self, request):   
         if not (request.user.is_staff or request.user.is_superuser):
             return Response(
                 {'error': 'Permission denied'},
@@ -425,7 +411,6 @@ class AnnouncementViewSet(viewsets.ModelViewSet):
 
 
 class AnnouncementCommentViewSet(viewsets.ModelViewSet):
-    """ViewSet for announcement comments"""
     
     serializer_class = AnnouncementCommentSerializer
     permission_classes = [IsAuthenticated]
@@ -442,11 +427,7 @@ class AnnouncementCommentViewSet(viewsets.ModelViewSet):
         serializer.save(user=self.request.user, is_approved=True)
     
     def get_permissions(self):
-        """
-        Instantiates and returns the list of permissions that this view requires.
-        """
         if self.action in ['update', 'partial_update', 'destroy']:
-            # Only allow users to edit/delete their own comments
             permission_classes = [IsAuthenticated]
         else:
             permission_classes = [IsAuthenticated]
@@ -454,54 +435,44 @@ class AnnouncementCommentViewSet(viewsets.ModelViewSet):
         return [permission() for permission in permission_classes]
     
     def check_object_permissions(self, request, obj):
-        """Check object permissions"""
         super().check_object_permissions(request, obj)
         
-        # Users can only edit/delete their own comments
         if self.action in ['update', 'partial_update', 'destroy']:
             if obj.user != request.user and not request.user.is_staff:
                 self.permission_denied(request)
 
 
-# Additional API views for specific functionality
 class AnnouncementStatsAPIView(generics.RetrieveAPIView):
-    """API view for announcement statistics"""
     
     permission_classes = [IsAuthenticated]
     
     def get(self, request, *args, **kwargs):
         user = request.user
         
-        # Get user's building statistics
         stats = {}
         
         try:
             if hasattr(user, 'apartment') and user.apartment:
                 building = user.apartment.building
                 
-                # Total announcements
                 total_announcements = Announcement.objects.filter(
                     building=building,
                     status='published'
                 ).count()
                 
-                # Read announcements
                 read_announcements = AnnouncementRead.objects.filter(
                     user=user,
                     announcement__building=building
                 ).count()
                 
-                # Unread announcements
                 unread_announcements = total_announcements - read_announcements
                 
-                # Urgent announcements
                 urgent_announcements = Announcement.objects.filter(
                     building=building,
                     status='published',
                     is_urgent=True
                 ).count()
                 
-                # Read percentage
                 read_percentage = (read_announcements / total_announcements * 100) if total_announcements > 0 else 0
                 
                 stats = {
